@@ -8,7 +8,7 @@ import { DOC_URL, GITHUB_URL, SITE_URL } from '@/settings/siteSetting'
 
 const { pkg, lastBuildTime } = __APP_INFO__
 
-const { dependencies, devDependencies, name, version } = pkg
+const { dependencies, devDependencies, version } = pkg
 
 const schema: DescItem[] = []
 const devSchema: DescItem[] = []
@@ -23,29 +23,9 @@ const infoSchema: DescItem[] = [
     render: commonTagRender('blue'),
   },
   {
-    label: '最后编译时间',
-    field: 'lastBuildTime',
-    render: commonTagRender('blue'),
-  },
-  {
-    label: '文档地址',
-    field: 'doc',
-    render: commonLinkRender('文档地址'),
-  },
-  {
-    label: '预览地址',
-    field: 'preview',
-    render: commonLinkRender('预览地址'),
-  },
-  {
     label: 'Github',
     field: 'github',
     render: commonLinkRender('Github'),
-  },
-  {
-    label: '外包服务',
-    field: 'outsourcing',
-    render: commonLinkRender('外包服务'),
   },
 ]
 
@@ -89,17 +69,7 @@ const [infoRegister] = useDescription({
 </script>
 
 <template>
-  <PageWrapper title="关于">
-    <template #headerContent>
-      <div class="flex items-center justify-between">
-        <span class="flex-1">
-          <a :href="GITHUB_URL" target="_blank">{{ name }}</a>
-          基于Vue3.0、Vite、 Ant-Design-Vue 、TypeScript
-          的后台解决方案，目标是为中大型项目开发,提供现成的开箱解决方案及丰富的示例,原则上不会限制任何代码用于商用。<br>
-          同时，我们也提供<a :href="SITE_URL" target="_blank">外包服务</a>。
-        </span>
-      </div>
-    </template>
+  <PageWrapper>
     <Description class="enter-y" @register="infoRegister" />
     <Description class="enter-y my-4" @register="register" />
     <Description class="enter-y" @register="registerDev" />

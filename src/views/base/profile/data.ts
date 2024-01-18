@@ -26,11 +26,6 @@ export const settingList = [
     component: 'SecureSetting',
   },
   {
-    key: '3',
-    name: '账号绑定',
-    component: 'AccountBind',
-  },
-  {
     key: '4',
     name: '新消息通知',
     component: 'MsgNotify',
@@ -82,7 +77,7 @@ export const secureSettingList: ListItem[] = [
   {
     key: '2',
     title: '密保手机',
-    description: '已绑定手机：：138****8293',
+    description: '已绑定手机：：134****8293',
     extra: '修改',
   },
   {
@@ -94,34 +89,8 @@ export const secureSettingList: ListItem[] = [
   {
     key: '4',
     title: '备用邮箱',
-    description: '已绑定邮箱：：ant***sign.com',
+    description: '已绑定邮箱：：man***ger.com',
     extra: '修改',
-  },
-  {
-    key: '5',
-    title: 'MFA 设备',
-    description: '未绑定 MFA 设备，绑定后，可以进行二次确认',
-    extra: '修改',
-  },
-]
-
-// 账号绑定 list
-export const accountBindList: ListItem[] = [
-  {
-    key: '20',
-    title: '钉钉',
-    description: '当前未绑定钉钉账号',
-    extra: '绑定',
-    avatar: 'ri:dingding-fill',
-    color: '#2eabff',
-  },
-  {
-    key: '30',
-    title: '企业微信',
-    description: '当前未绑定企业微信',
-    extra: '绑定',
-    avatar: 'ri:wechat-line',
-    color: '#2eabff',
   },
 ]
 

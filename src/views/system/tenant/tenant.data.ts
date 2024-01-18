@@ -46,11 +46,6 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '绑定域名',
-    dataIndex: 'domain',
-    width: 200,
-  },
-  {
     title: '租户状态',
     dataIndex: 'status',
     width: 180,
@@ -173,12 +168,6 @@ export const formSchema: FormSchema[] = [
       format: 'YYYY-MM-DD HH:mm:ss',
       valueFormat: 'x',
     },
-  },
-  {
-    label: '绑定域名',
-    field: 'domain',
-    required: true,
-    component: 'Input',
   },
   {
     label: '租户状态',

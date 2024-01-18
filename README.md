@@ -1,26 +1,4 @@
-# yudao-ui-admin-vben
-
-**严肃声明：现在、未来都不会有商业版本，所有代码全部开源!！**
-
-**「我喜欢写代码，乐此不疲」**  
-**「我喜欢做开源，以此为乐」**
-
-如果这个项目让你有所收获，记得 Star 关注哦，这对我是非常不错的鼓励与支持。
-
-## 预览地址
-
-- [预览地址](http://dashboard-vben.yudao.iocoder.cn/)
-- [启动文档](https://doc.iocoder.cn/quick-start/)
-- [开发文档](http://vben-doc.x-surge.com/)
-- [视频教程](https://doc.iocoder.cn/video/)
-
-## 外包项目请联系 [ xinyu370 ]
-
-- ![alt 定制开发](./public/resource/img/wx2.png)
-
-## 交流群
-
-- ![alt 交流群](./public/resource/img/wx.png)
+# llm-system
 
 ## 框架
 
@@ -36,28 +14,6 @@
 | [vue-router](https://router.vuejs.org/)                              | Vue 路由              | 4.2.5  |
 | [unocss](https://uno.antfu.me/)                                      | 原子 css              | 0.57.1 |
 | [iconify](https://icon-sets.iconify.design/)                         | 在线图标库            | 3.1.1  |
-
-- ![alt Admin](./public/resource/img/preview.png)
-
-## 准备
-
-- [node](http://nodejs.org/) 和 [git](https://git-scm.com/) -项目开发环境
-- [Vite4](https://vitejs.dev/) - 熟悉 vite 特性
-- [Vue3](https://v3.vuejs.org/) - 熟悉 Vue 基础语法
-- [TypeScript](https://www.typescriptlang.org/) - 熟悉`TypeScript`基本语法
-- [Es6+](http://es6.ruanyifeng.com/) - 熟悉 es6 基本语法
-- [Vue-Router-Next](https://next.router.vuejs.org/) - 熟悉 vue-router 基本使用
-- [Ant-Design-Vue-4.0](https://antdv.com/) - ui 基本使用
-
-## 安装使用
-
-- 获取项目代码
-
-```bash
-git clone https://gitee.com/xingyuv/yudao-ui-admin-vben.git
-or
-git clone https://github.com/xingyuv/yudao-ui-admin-vben.git
-```
 
 - 安装依赖
 
@@ -75,11 +31,6 @@ npm add -g pnpm
 
 ```bash
 pnpm dev
-
-or
-// 如果不想启动后端
-
-pnpm front
 
 ```
 
