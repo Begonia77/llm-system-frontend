@@ -5,7 +5,7 @@ import { Icon } from '@/components/Icon'
 </script>
 
 <template>
-  <Card title="项目" v-bind="$attrs">
+  <Card title="待办事项" v-bind="$attrs">
     <template #extra>
       <a-button type="link">
         更多

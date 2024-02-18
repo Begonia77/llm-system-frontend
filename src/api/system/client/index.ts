@@ -1,0 +1,31 @@
+import { defHttp } from '@/utils/http/axios'
+
+// 查询供应商/客户列表
+export function getClientPage(params) {
+  return defHttp.get({ url: '/system/client/page', params })
+}
+
+// 查询供应商/客户详情
+export function getClient(id: number) {
+  return defHttp.get({ url: `/system/client/get?id=${id}` })
+}
+
+// 新增供应商/客户
+export function createClient(data) {
+  return defHttp.post({ url: '/system/client/create', data })
+}
+
+// 修改供应商/客户
+export function updateClient(data) {
+  return defHttp.put({ url: '/system/client/update', data })
+}
+
+// 删除供应商/客户
+export function deleteClient(id: number) {
+  return defHttp.delete({ url: `/system/client/delete?id=${id}` })
+}
+
+// 导出供应商/客户 Excel
+export function exportClient(params) {
+  return defHttp.download({ url: '/system/client/export-excel', params }, '供应商/客户.xls')
+}
