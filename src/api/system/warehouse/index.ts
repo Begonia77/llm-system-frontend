@@ -29,3 +29,8 @@ export function deleteWarehouse(id: number) {
 export function exportWarehouse(params) {
   return defHttp.download({ url: '/system/warehouse/export-excel', params }, '仓库.xls')
 }
+
+// 获得仓库精简列表
+export function getSimpleWarehouse() {
+  return defHttp.get({ url: '/system/warehouse/list-all-simple' })
+}
