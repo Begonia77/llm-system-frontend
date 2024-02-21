@@ -4,9 +4,10 @@ import { Button, Form, FormItem, Input, InputNumber } from 'ant-design-vue'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons-vue'
 import type { FormInstance } from 'ant-design-vue'
 import { createFormSchema, updateFormSchema } from './order.data'
+import { createItemFormSchema, updateItemFormSchema } from './orderItem.data'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useMessage } from '@/hooks/web/useMessage'
-import { BasicForm, useForm } from '@/components/Form'
+import { ApiSelect, BasicForm, useForm } from '@/components/Form'
 import { BasicModal, useModalInner } from '@/components/Modal'
 import { createOrder, getOrder, updateOrder } from '@/api/system/order'
 
@@ -22,6 +23,14 @@ const [registerForm, { setFieldsValue, resetFields, resetSchema, validate }] = u
   labelWidth: 120,
   baseColProps: { span: 24 },
   schemas: createFormSchema,
+  showActionButtonGroup: false,
+  actionColOptions: { span: 23 },
+})
+
+const [registerItemForm] = useForm({
+  labelWidth: 120,
+  baseColProps: { span: 24 },
+  schemas: createItemFormSchema,
   showActionButtonGroup: false,
   actionColOptions: { span: 23 },
 })
@@ -134,7 +143,7 @@ async function handleSubmit() {
         单价
       </div>
     </div>
-    <Form
+    <!-- <Form
       ref="formRef"
       name="dynamic_form_item"
       :model="dynamicValidateForm"
@@ -175,15 +184,8 @@ async function handleSubmit() {
           添加
         </Button>
       </FormItem>
-      <!-- <FormItem v-bind="formItemLayoutWithOutLabel">
-        <Button type="primary" html-type="submit" @click="submitForm">
-          Submit
-        </Button>
-        <Button style="margin-left: 10px" @click="resetForm">
-          Reset
-        </Button>
-      </FormItem> -->
-    </Form>
+    </Form> -->
+    <BasicForm @register="registerItemForm" />
   </BasicModal>
 </template>
 

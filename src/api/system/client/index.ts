@@ -29,3 +29,8 @@ export function deleteClient(id: number) {
 export function exportClient(params) {
   return defHttp.download({ url: '/system/client/export-excel', params }, '供应商/客户.xls')
 }
+
+// 获得供应商/客户精简列表
+export function getSimpleClient() {
+  return defHttp.get({ url: '/system/client/list-all-simple' })
+}

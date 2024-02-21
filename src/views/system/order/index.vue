@@ -9,7 +9,6 @@ import { useModal } from '@/components/Modal'
 import { IconEnum } from '@/enums/appEnum'
 import { BasicTable, TableAction, useTable } from '@/components/Table'
 import { deleteOrder, exportOrder, getOrderPage } from '@/api/system/order'
-import { getOrderItemPage } from '@/api/system/orderitem'
 
 defineOptions({ name: 'Order' })
 
@@ -39,20 +38,10 @@ function handleCreate() {
   openModal(true, { isUpdate: false })
 }
 
-async function getOrderItemPageData(orderId: number) {
-  const res = await getOrderItemPage({
-    page: 1,
-    pageSize: 10,
-    orderId,
-  })
-  orderData.value = res.list
-}
-
 async function handleView(record: Recordable) {
-  // console.log('进入查看', record.id)
+  console.log('执行了', record)
   if (!isViewDetail.value)
-    await getOrderItemPageData(record.id || 0)
-  orderInfo.value = record
+    orderInfo.value = record
   isViewDetail.value = !isViewDetail.value
 }
 
@@ -108,6 +97,6 @@ async function handleDelete(record: Recordable) {
       </template>
     </BasicTable>
     <OrderModal @register="registerModal" @success="reload()" />
-    <OrderDetail :order-data="orderData" :order-info="orderInfo" :is-view-detail="isViewDetail" @close="handleView" />
+    <OrderDetail :order-data="orderData" :order-id="orderInfo.id" :order-info="orderInfo" :is-view-detail="isViewDetail" @close="handleView" />
   </div>
 </template>

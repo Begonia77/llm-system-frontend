@@ -24,7 +24,7 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '仓库负责人',
-    dataIndex: 'userId',
+    dataIndex: 'userNickname',
     width: 160,
   },
   {

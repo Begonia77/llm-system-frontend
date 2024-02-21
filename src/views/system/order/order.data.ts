@@ -1,3 +1,4 @@
+import { getSimpleClient } from '@/api/system/client'
 import { getListSimpleUsers } from '@/api/system/user'
 import { getSimpleWarehouse } from '@/api/system/warehouse'
 import type { BasicColumn, FormSchema } from '@/components/Table'
@@ -12,7 +13,7 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '仓库',
-    dataIndex: 'warehouseId',
+    dataIndex: 'warehouseName',
     width: 160,
   },
   {
@@ -24,13 +25,13 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '客户/供应商id',
-    dataIndex: 'clientId',
+    title: '客户/供应商',
+    dataIndex: 'clientName',
     width: 160,
   },
   {
     title: '业务员',
-    dataIndex: 'userId',
+    dataIndex: 'userNickname',
     width: 160,
   },
   // {
@@ -48,14 +49,6 @@ export const columns: BasicColumn[] = [
     dataIndex: 'remarks',
     width: 160,
   },
-  // {
-  //   title: '状态',
-  //   dataIndex: 'status',
-  //   width: 180,
-  //   customRender: ({ text }) => {
-  //     return useRender.renderDict(text, DICT_TYPE.COMMON_STATUS)
-  //   },
-  // },
   {
     title: '创建时间',
     dataIndex: 'createTime',
@@ -94,9 +87,14 @@ export const searchFormSchema: FormSchema[] = [
     colProps: { span: 8 },
   },
   {
-    label: '客户/供应商id',
+    label: '客户/供应商',
     field: 'clientId',
-    component: 'Input',
+    component: 'ApiSelect',
+    componentProps: {
+      api: () => getSimpleClient(),
+      labelField: 'name',
+      valueField: 'id',
+    },
     colProps: { span: 8 },
   },
   {
@@ -182,9 +180,14 @@ export const createFormSchema: FormSchema[] = [
     },
   },
   {
-    label: '客户/供应商id',
+    label: '客户/供应商',
     field: 'clientId',
-    component: 'Input',
+    component: 'ApiSelect',
+    componentProps: {
+      api: () => getSimpleClient(),
+      labelField: 'name',
+      valueField: 'id',
+    },
   },
   {
     label: '备注',
@@ -242,7 +245,12 @@ export const updateFormSchema: FormSchema[] = [
   {
     label: '客户/供应商id',
     field: 'clientId',
-    component: 'Input',
+    component: 'ApiSelect',
+    componentProps: {
+      api: () => getSimpleClient(),
+      labelField: 'name',
+      valueField: 'id',
+    },
   },
   {
     label: '业务员',

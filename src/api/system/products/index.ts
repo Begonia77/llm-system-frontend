@@ -29,3 +29,8 @@ export function deleteProducts(id: number) {
 export function exportProducts(params) {
   return defHttp.download({ url: '/system/products/export-excel', params }, '产品.xls')
 }
+
+// 获得产品精简列表
+export function getSimpleProducts() {
+  return defHttp.get({ url: '/system/products/list-all-simple' })
+}
