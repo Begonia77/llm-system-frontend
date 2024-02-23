@@ -1,15 +1,14 @@
 <script lang="ts" setup>
-import { reactive, ref, unref } from 'vue'
-import { Button, Form, FormItem, Input, InputNumber } from 'ant-design-vue'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons-vue'
-import type { FormInstance } from 'ant-design-vue'
+import { ref, unref } from 'vue'
+import { Button } from 'ant-design-vue'
 import { createFormSchema, updateFormSchema } from './order.data'
-import { createItemFormSchema, updateItemFormSchema } from './orderItem.data'
+import { createItemFormSchema } from './orderItem.data'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useMessage } from '@/hooks/web/useMessage'
-import { ApiSelect, BasicForm, useForm } from '@/components/Form'
+import { BasicForm, useForm } from '@/components/Form'
 import { BasicModal, useModalInner } from '@/components/Modal'
 import { createOrder, getOrder, updateOrder } from '@/api/system/order'
+import { getSimpleProducts } from '@/api/system/products'
 
 defineOptions({ name: 'OrderModal' })
 
@@ -18,6 +17,8 @@ const emit = defineEmits(['success', 'register'])
 const { t } = useI18n()
 const { createMessage } = useMessage()
 const isUpdate = ref(true)
+const n = ref(1)
+const num = ref(1)
 
 const [registerForm, { setFieldsValue, resetFields, resetSchema, validate }] = useForm({
   labelWidth: 120,
@@ -27,7 +28,7 @@ const [registerForm, { setFieldsValue, resetFields, resetSchema, validate }] = u
   actionColOptions: { span: 23 },
 })
 
-const [registerItemForm] = useForm({
+const [registerItemForm, { validate: itemValidate, appendSchemaByField, removeSchemaByField }] = useForm({
   labelWidth: 120,
   baseColProps: { span: 24 },
   schemas: createItemFormSchema,
@@ -45,77 +46,42 @@ const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data
     setFieldsValue({ ...res })
   }
 })
-interface Domain {
-  productId: number | undefined
-  quantity: number
-  price: number
-  key?: number
-  orderId?: number | string
-}
-const formRef = ref<FormInstance>()
-// const formItemLayout = {
-//   labelCol: {
-//     xs: { span: 24 },
-//     sm: { span: 4 },
-//   },
-//   wrapperCol: {
-//     xs: { span: 24 },
-//     sm: { span: 20 },
-//   },
-// }
-const formItemLayoutWithOutLabel = {
-  wrapperCol: {
-    xs: { span: 24, offset: 0 },
-    sm: { span: 20, offset: 5 },
-  },
-}
-const dynamicValidateForm = reactive<{ domains: Domain[] }>({
-  domains: [
-    {
-      productId: undefined,
-      quantity: 1,
-      price: 0,
-      key: Date.now(),
-    },
-  ],
-})
-// function submitForm() {
-//   formRef.value
-//     .validate()
-//     .then(() => {
-//       console.log('values', dynamicValidateForm.domains)
-//     })
-//     .catch((error) => {
-//       console.log('error', error)
-//     })
-// }
-// function resetForm() {
-//   formRef.value.resetFields()
-// }
-function removeDomain(item: Domain) {
-  const index = dynamicValidateForm.domains.indexOf(item)
-  if (index !== -1)
-    dynamicValidateForm.domains.splice(index, 1)
-}
-function addDomain() {
-  dynamicValidateForm.domains.push({
-    productId: undefined,
-    quantity: 1,
-    price: 0,
-    key: Date.now(),
-  })
-}
 
 async function handleSubmit() {
   try {
     const values = await validate()
+    const itemValues = await itemValidate()
+
+    for (let i = 0; i < n.value; i++) {
+      for (let j = i + 1; j < n.value; j++) {
+        if (itemValues[`productId${i}`] && itemValues[`productId${j}`] && itemValues[`productId${i}`] === itemValues[`productId${j}`]) {
+          createMessage.error('购买商品重复，请进行修改')
+          return
+        }
+      }
+    }
+
+    const itemOrder: any = []
+    for (let i = 0; i < n.value; i++) {
+      if (itemValues[`productId${i}`]) {
+        itemOrder.push({
+          productId: itemValues[`productId${i}`],
+          quantity: itemValues[`quantity${i}`],
+          price: itemValues[`price${i}`],
+        })
+      }
+    }
+
+    console.log('itemValues', itemValues)
     setModalProps({ confirmLoading: true })
     if (unref(isUpdate)) {
-      values.orderItems = dynamicValidateForm.domains
+      values.orderItems = itemOrder
       await updateOrder(values)
     }
     else {
-      values.orderItems = dynamicValidateForm.domains
+      console.log('itemOrder', itemOrder)
+      values.orderItems = itemOrder
+      console.log('values', values)
       await createOrder(values)
     }
 
@@ -126,6 +92,61 @@ async function handleSubmit() {
   finally {
     setModalProps({ confirmLoading: false })
   }
+}
+
+function appendField() {
+  appendSchemaByField(
+    [
+      {
+        field: `productId${n.value}`,
+        component: 'ApiSelect',
+        componentProps: {
+          api: () => getSimpleProducts(),
+          labelField: 'name',
+          valueField: 'id',
+        },
+        required: true,
+        colProps: { span: 7 },
+      },
+      {
+        field: `quantity${n.value}`,
+        component: 'InputNumber',
+        required: true,
+        colProps: { span: 5, offset: 1 },
+        defaultValue: 1,
+        componentProps: {
+          min: 1,
+        },
+      },
+      {
+        field: `price${n.value}`,
+        component: 'InputNumber',
+        required: true,
+        colProps: { span: 5, offset: 1 },
+        defaultValue: 0,
+        componentProps: {
+          min: 0,
+          precision: 2,
+          step: 0.5,
+        },
+      },
+      {
+        field: `${n.value}`,
+        component: 'Input',
+        label: ' ',
+        slot: 'add',
+        colProps: { span: 2 },
+      },
+    ],
+    '',
+  )
+  n.value++
+  num.value++
+}
+
+function del(field: number) {
+  removeSchemaByField([`productId${field}`, `quantity${field}`, `price${field}`, `${field}`])
+  num.value--
 }
 </script>
 
@@ -142,50 +163,19 @@ async function handleSubmit() {
       <div class="order-item-title-price">
         单价
       </div>
-    </div>
-    <!-- <Form
-      ref="formRef"
-      name="dynamic_form_item"
-      :model="dynamicValidateForm"
-    >
-      <FormItem
-        v-for="(domain, index) in dynamicValidateForm.domains"
-        :key="domain.key"
-        :name="['domains', index, 'value']"
-        style="display: flex;"
-      >
-        <Input
-          v-model:value="domain.productId"
-          placeholder="请选择产品"
-          style="width: 38%; margin-right: 8px"
-        />
-        <InputNumber
-          v-model:value="domain.quantity"
-          placeholder="购买数量"
-          style="width: 25%; margin-right: 8px"
-          :min="1"
-        />
-        <InputNumber
-          v-model:value="domain.price"
-          placeholder="单价"
-          style="width: 25%; margin-right: 8px"
-          :min="0"
-          :step="0.05"
-        />
-        <MinusCircleOutlined
-          v-if="dynamicValidateForm.domains.length > 1"
-          class="dynamic-delete-button"
-          @click="removeDomain(domain)"
-        />
-      </FormItem>
-      <FormItem v-bind="formItemLayoutWithOutLabel">
-        <Button type="dashed" style="width: 60%" @click="addDomain">
-          <PlusOutlined />
-          添加
+      <div class="order-item-title-button">
+        <Button @click="appendField">
+          增加
         </Button>
-      </FormItem>
-    </Form> -->
-    <BasicForm @register="registerItemForm" />
+      </div>
+    </div>
+    <BasicForm @register="registerItemForm">
+      <template #add="{ field }">
+        <Button v-if="num > 1" class="ml-2" @click="() => del(field)">
+          -
+        </Button>
+      </template>
+    </BasicForm>
   </BasicModal>
 </template>
 
@@ -193,22 +183,26 @@ async function handleSubmit() {
   .order-item-title {
     display: flex;
     justify-content: space-between;
-    width: 88%;
     margin-bottom: 10px;
 
     &-name {
-      width: 38%;
+      width: 29%;
       text-align: center;
     }
 
     &-number {
-      width: 25%;
+      width: 28%;
       text-align: center;
     }
 
     &-price {
-      width: 25%;
+      width: 21%;
       text-align: center;
+    }
+
+    &-button {
+      width: 19%;
+      padding-left: 5%;
     }
   }
 

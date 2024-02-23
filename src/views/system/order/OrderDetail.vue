@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Modal } from 'ant-design-vue'
 import dayjs from 'dayjs'
+import { watch } from 'vue'
 import { columns } from './orderItem.data'
 import { getOrderItemPage } from '@/api/system/orderitem'
 import { BasicTable, useTable } from '@/components/Table'
@@ -15,7 +16,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {})
 const emit = defineEmits(['close'])
 
-const [registerTable] = useTable({
+const [registerTable, { reload }] = useTable({
   api: () => getOrderItemPage({
     page: 1,
     pageSize: 10,
@@ -29,6 +30,12 @@ function handleOk(e: MouseEvent) {
   console.log('进来了', props.orderInfo, '   ', props.orderId)
   emit('close')
 }
+
+watch(() => props.orderId, () => {
+  console.log('props.orderId', props.orderId)
+  // TODO: 第一次会报错，未获取表格实例
+  reload()
+}, { immediate: false })
 </script>
 
 <template>
@@ -44,7 +51,7 @@ function handleOk(e: MouseEvent) {
         创建时间: {{ dayjs(props.orderInfo?.createTime).format('YYYY-MM-DD HH:mm:ss') }}
       </div>
       <div class="order-item-container-text">
-        购买数量: {{ props.orderInfo?.itemQuantity }}
+        购买数量: {{ props.orderInfo?.totalQuantity }}
       </div>
       <div class="order-item-container-text">
         订单单号: {{ props.orderInfo?.orderNumber }}

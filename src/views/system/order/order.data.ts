@@ -12,17 +12,22 @@ export const columns: BasicColumn[] = [
     width: 160,
   },
   {
-    title: '仓库',
-    dataIndex: 'warehouseName',
-    width: 160,
-  },
-  {
     title: '订单类型',
     dataIndex: 'type',
     width: 180,
     customRender: ({ text }) => {
       return useRender.renderDict(text, DICT_TYPE.ORDER_TYPE)
     },
+  },
+  {
+    title: '购买数量',
+    dataIndex: 'totalQuantity',
+    width: 160,
+  },
+  {
+    title: '总金额',
+    dataIndex: 'totalAmount',
+    width: 160,
   },
   {
     title: '客户/供应商',
@@ -34,16 +39,11 @@ export const columns: BasicColumn[] = [
     dataIndex: 'userNickname',
     width: 160,
   },
-  // {
-  //   title: '总金额',
-  //   dataIndex: 'totalAmount',
-  //   width: 160,
-  // },
-  // {
-  //   title: '购买数量',
-  //   dataIndex: 'itemQuantity',
-  //   width: 160,
-  // },
+  {
+    title: '仓库',
+    dataIndex: 'warehouseName',
+    width: 160,
+  },
   {
     title: '备注',
     dataIndex: 'remarks',
@@ -163,12 +163,6 @@ export const createFormSchema: FormSchema[] = [
       labelField: 'name',
       valueField: 'id',
     },
-    // component: 'ApiSelect',
-    // componentProps: {
-    //   api: getWarehouseList,
-    //   labelField: 'name',
-    //   valueField: 'id',
-    // },
   },
   {
     label: '订单类型',

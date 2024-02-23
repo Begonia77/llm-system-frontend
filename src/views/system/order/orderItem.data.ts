@@ -5,7 +5,7 @@ import { useRender } from '@/components/Table'
 export const columns: BasicColumn[] = [
   {
     title: '产品',
-    dataIndex: 'productId',
+    dataIndex: 'productName',
     width: 160,
   },
   {
@@ -53,41 +53,50 @@ export const searchItemFormSchema: FormSchema[] = [
 
 export const createItemFormSchema: FormSchema[] = [
   {
-    label: '编号',
-    field: 'id',
-    show: false,
-    component: 'Input',
-  },
-  {
-    field: 'productId',
+    field: 'productId0',
     component: 'ApiSelect',
     componentProps: {
       api: () => getSimpleProducts(),
       labelField: 'name',
       valueField: 'id',
     },
-    colProps: { span: 8 },
+    colProps: { span: 7 },
+    required: true,
   },
   {
-    field: 'quantity',
-    component: 'Input',
+    field: 'quantity0',
+    component: 'InputNumber',
+    colProps: { span: 5, offset: 1 },
+    defaultValue: 1,
+    required: true,
+    componentProps: {
+      min: 1,
+    },
   },
   {
-    field: 'price',
+    field: 'price0',
+    component: 'InputNumber',
+    colProps: { span: 5, offset: 1 },
+    defaultValue: 0,
+    required: true,
+    componentProps: {
+      min: 0,
+      precision: 2,
+      step: 0.5,
+    },
+  },
+  {
+    field: '0',
     component: 'Input',
+    label: ' ',
+    slot: 'add',
+    colProps: { span: 2 },
   },
 ]
 
 export const updateItemFormSchema: FormSchema[] = [
   {
-    label: '编号',
-    field: 'id',
-    show: false,
-    component: 'Input',
-  },
-  {
-    label: '产品',
-    field: 'productId',
+    field: 'productId0',
     component: 'ApiSelect',
     componentProps: {
       api: () => getSimpleProducts(),
@@ -96,13 +105,17 @@ export const updateItemFormSchema: FormSchema[] = [
     },
   },
   {
-    label: '数量',
-    field: 'quantity',
+    field: 'quantity0',
     component: 'Input',
   },
   {
-    label: '价格',
-    field: 'price',
+    field: 'price0',
     component: 'Input',
+  },
+  {
+    field: '0',
+    component: 'Input',
+    label: ' ',
+    slot: 'add',
   },
 ]
