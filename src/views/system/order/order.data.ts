@@ -108,12 +108,12 @@ export const searchFormSchema: FormSchema[] = [
     },
     colProps: { span: 8 },
   },
-  {
-    label: '备注',
-    field: 'remarks',
-    component: 'Input',
-    colProps: { span: 8 },
-  },
+  // {
+  //   label: '备注',
+  //   field: 'remarks',
+  //   component: 'Input',
+  //   colProps: { span: 8 },
+  // },
   // {
   //   label: '状态',
   //   field: 'status',

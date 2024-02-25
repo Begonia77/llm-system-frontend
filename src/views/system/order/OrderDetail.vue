@@ -31,11 +31,10 @@ function handleOk(e: MouseEvent) {
   emit('close')
 }
 
-watch(() => props.orderId, () => {
-  console.log('props.orderId', props.orderId)
-  // TODO: 第一次会报错，未获取表格实例
-  reload()
-}, { immediate: false })
+watch(() => props.orderId, (_, oldValue) => {
+  if (oldValue) 
+    reload()
+})
 </script>
 
 <template>

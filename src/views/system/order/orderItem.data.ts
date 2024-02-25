@@ -1,6 +1,26 @@
+import { ref } from 'vue'
+import { getSimpleClient } from '@/api/system/client'
 import { getSimpleProducts } from '@/api/system/products'
+import { getListSimpleUsers } from '@/api/system/user'
+import { getSimpleWarehouse } from '@/api/system/warehouse'
 import type { BasicColumn, FormSchema } from '@/components/Table'
-import { useRender } from '@/components/Table'
+import { DICT_TYPE, getDictOptions } from '@/utils/dict'
+
+const productsList = ref<any[]>([])
+async function getchannelList() {
+  const res = await getSimpleProducts()
+  productsList.value = res
+  productsList.value = productsList.value.map((item: any) => {
+    return {
+      ...item,
+      label: item.name,
+      value: item.id,
+    }
+  })
+  console.log('productsList.value', productsList.value)
+}
+
+getchannelList()
 
 export const columns: BasicColumn[] = [
   {
@@ -53,23 +73,104 @@ export const searchItemFormSchema: FormSchema[] = [
 
 export const createItemFormSchema: FormSchema[] = [
   {
-    field: 'productId0',
+    label: '编号',
+    field: 'id',
+    show: false,
+    component: 'Input',
+  },
+  // {
+  //   label: '订单单号',
+  //   field: 'orderNumber',
+  //   component: 'Input',
+  // },
+  {
+    label: '业务员',
+    field: 'userId',
     component: 'ApiSelect',
     componentProps: {
-      api: () => getSimpleProducts(),
+      api: () => getListSimpleUsers(),
+      labelField: 'nickname',
+      valueField: 'id',
+    },
+  },
+  {
+    label: '仓库',
+    field: 'warehouseId',
+    required: true,
+    component: 'ApiSelect',
+    componentProps: {
+      api: () => getSimpleWarehouse(),
       labelField: 'name',
       valueField: 'id',
     },
+  },
+  {
+    label: '订单类型',
+    field: 'type',
+    required: true,
+    component: 'Select',
+    componentProps: {
+      options: getDictOptions(DICT_TYPE.ORDER_TYPE, 'number'),
+    },
+  },
+  {
+    label: '客户/供应商',
+    field: 'clientId',
+    component: 'ApiSelect',
+    componentProps: {
+      api: () => getSimpleClient(),
+      labelField: 'name',
+      valueField: 'id',
+    },
+  },
+  {
+    label: '备注',
+    field: 'remarks',
+    component: 'Input',
+  },
+  // {
+  //   label: '状态',
+  //   field: 'status',
+  //   required: true,
+  //   component: 'RadioButtonGroup',
+  //   componentProps: {
+  //     options: getDictOptions(DICT_TYPE.COMMON_STATUS, 'number'),
+  //   },
+  // },
+  {
+    field: 'title',
+    label: '',
+    component: 'Input',
+    slot: 'title',
+  },
+  {
+    field: 'productId0',
+    component: 'Select',
     colProps: { span: 7 },
     required: true,
+    componentProps: ({ formModel, formActionType }) => {
+      return {
+        options: productsList.value,
+        placeholder: '请选择商品',
+        onChange: (e: any) => {
+          const { getFieldsValue } = formActionType
+          const resultValue = getFieldsValue()
+          const product = productsList.value.find((item: any) => item.id === e)
+          if (resultValue.type === 1)
+            formModel.price0 = product.purchasePrice
+          else
+            formModel.price0 = product.salePrice
+        },
+      }
+    },
   },
   {
     field: 'quantity0',
     component: 'InputNumber',
     colProps: { span: 5, offset: 1 },
-    defaultValue: 1,
     required: true,
     componentProps: {
+      defaultValue: 1,
       min: 1,
     },
   },
@@ -77,9 +178,9 @@ export const createItemFormSchema: FormSchema[] = [
     field: 'price0',
     component: 'InputNumber',
     colProps: { span: 5, offset: 1 },
-    defaultValue: 0,
     required: true,
     componentProps: {
+      defaultValue: 0,
       min: 0,
       precision: 2,
       step: 0.5,

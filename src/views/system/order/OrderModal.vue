@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { ref, unref } from 'vue'
 import { Button } from 'ant-design-vue'
-import { createFormSchema, updateFormSchema } from './order.data'
-import { createItemFormSchema } from './orderItem.data'
+import { createItemFormSchema, updateItemFormSchema } from './orderItem.data'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useMessage } from '@/hooks/web/useMessage'
 import { BasicForm, useForm } from '@/components/Form'
@@ -20,15 +19,29 @@ const isUpdate = ref(true)
 const n = ref(1)
 const num = ref(1)
 
-const [registerForm, { setFieldsValue, resetFields, resetSchema, validate }] = useForm({
-  labelWidth: 120,
-  baseColProps: { span: 24 },
-  schemas: createFormSchema,
-  showActionButtonGroup: false,
-  actionColOptions: { span: 23 },
-})
+const productsList = ref<any[]>([])
+async function getchannelList() {
+  const res = await getSimpleProducts()
+  productsList.value = res
+  productsList.value = productsList.value.map((item: any) => {
+    return {
+      ...item,
+      label: item.name,
+      value: item.id,
+    }
+  })
+}
 
-const [registerItemForm, { validate: itemValidate, appendSchemaByField, removeSchemaByField }] = useForm({
+getchannelList()
+// const [registerForm, { setFieldsValue, resetFields, resetSchema, validate }] = useForm({
+//   labelWidth: 120,
+//   baseColProps: { span: 24 },
+//   schemas: createFormSchema,
+//   showActionButtonGroup: false,
+//   actionColOptions: { span: 23 },
+// })
+
+const [registerItemForm, { resetFields, resetSchema, setFieldsValue, validate: itemValidate, appendSchemaByField, removeSchemaByField }] = useForm({
   labelWidth: 120,
   baseColProps: { span: 24 },
   schemas: createItemFormSchema,
@@ -41,7 +54,7 @@ const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data
   setModalProps({ confirmLoading: false })
   isUpdate.value = !!data?.isUpdate
   if (unref(isUpdate)) {
-    resetSchema(updateFormSchema)
+    resetSchema(updateItemFormSchema)
     const res = await getOrder(data.record.id)
     setFieldsValue({ ...res })
   }
@@ -49,7 +62,6 @@ const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data
 
 async function handleSubmit() {
   try {
-    const values = await validate()
     const itemValues = await itemValidate()
 
     for (let i = 0; i < n.value; i++) {
@@ -69,20 +81,21 @@ async function handleSubmit() {
           quantity: itemValues[`quantity${i}`],
           price: itemValues[`price${i}`],
         })
+        delete itemValues[`productId${i}`]
+        delete itemValues[`quantity${i}`]
+        delete itemValues[`price${i}`]
+        delete itemValues[`${i}`]
       }
     }
 
-    console.log('itemValues', itemValues)
     setModalProps({ confirmLoading: true })
     if (unref(isUpdate)) {
-      values.orderItems = itemOrder
-      await updateOrder(values)
+      itemValues.orderItems = itemOrder
+      await updateOrder(itemValues)
     }
     else {
-      console.log('itemOrder', itemOrder)
-      values.orderItems = itemOrder
-      console.log('values', values)
-      await createOrder(values)
+      itemValues.orderItems = itemOrder
+      await createOrder(itemValues)
     }
 
     closeModal()
@@ -99,11 +112,23 @@ function appendField() {
     [
       {
         field: `productId${n.value}`,
-        component: 'ApiSelect',
-        componentProps: {
-          api: () => getSimpleProducts(),
-          labelField: 'name',
-          valueField: 'id',
+        component: 'Select',
+        componentProps: (data) => {
+          return {
+            options: productsList.value,
+            placeholder: '请选择商品',
+            onChange: (e: any) => {
+              const { formActionType, formModel, schema } = data
+
+              const { getFieldsValue } = formActionType
+              const resultValue = getFieldsValue()
+              const product = productsList.value.find((item: any) => item.id === e)
+              if (resultValue.type === 1)
+                formModel[`price${schema.field.replace('productId', '')}`] = product.purchasePrice
+              else
+                formModel[`price${schema.field.replace('productId', '')}`] = product.salePrice
+            },
+          }
         },
         required: true,
         colProps: { span: 7 },
@@ -152,24 +177,26 @@ function del(field: number) {
 
 <template>
   <BasicModal v-bind="$attrs" :title="isUpdate ? t('action.edit') : t('action.create')" @register="registerModal" @ok="handleSubmit">
-    <BasicForm @register="registerForm" />
-    <div class="order-item-title">
-      <div class="order-item-title-name">
-        订单项名称
-      </div>
-      <div class="order-item-title-number">
-        数量
-      </div>
-      <div class="order-item-title-price">
-        单价
-      </div>
-      <div class="order-item-title-button">
-        <Button @click="appendField">
-          增加
-        </Button>
-      </div>
-    </div>
+    <!-- <BasicForm @register="registerForm" /> -->
     <BasicForm @register="registerItemForm">
+      <template #title>
+        <div class="order-item-title">
+          <div class="order-item-title-name">
+            订单项名称
+          </div>
+          <div class="order-item-title-number">
+            数量
+          </div>
+          <div class="order-item-title-price">
+            单价
+          </div>
+          <div class="order-item-title-button">
+            <Button @click="appendField">
+              增加
+            </Button>
+          </div>
+        </div>
+      </template>
       <template #add="{ field }">
         <Button v-if="num > 1" class="ml-2" @click="() => del(field)">
           -
