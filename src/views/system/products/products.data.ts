@@ -19,6 +19,14 @@ export const columns: BasicColumn[] = [
     width: 160
   },
   {
+    title: '库存',
+    dataIndex: 'inventory',
+    width: 160,
+    customRender: ({ text }) => {
+      return text || 0
+    },
+  },
+  {
     title: '产品描述',
     dataIndex: 'description',
     width: 160
