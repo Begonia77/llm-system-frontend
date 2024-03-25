@@ -72,6 +72,16 @@ export function getDictObj(dictType: string, value: any) {
   }
 }
 
+export function getDictLabel(dictType: string, value: any) {
+  const dictOptions: DictDataType[] = getDictDatas(dictType)
+  if (dictOptions) {
+    for (const dict of dictOptions) {
+      if (dict.value === value.toString())
+        return dict.label
+    }
+  }
+  return value
+}
 export enum DICT_TYPE {
   USER_TYPE = 'user_type',
   COMMON_STATUS = 'common_status',

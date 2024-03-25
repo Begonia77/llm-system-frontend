@@ -5,6 +5,7 @@ import { watch } from 'vue'
 import { columns } from './orderItem.data'
 import { getOrderItemPage } from '@/api/system/orderitem'
 import { BasicTable, useTable } from '@/components/Table'
+import { DICT_TYPE, getDictLabel } from '@/utils/dict'
 
 interface Props {
   isViewDetail: boolean
@@ -62,7 +63,9 @@ watch(() => props.orderId, (_, oldValue) => {
         总金额: {{ props.orderInfo?.totalAmount || 0 }}
       </div> -->
       <div class="order-item-container-text">
-        订单类型: {{ props.orderInfo?.type }}
+        <!-- 订单类型: {{ props.orderInfo?.type }} -->
+        <!-- 使用字典DICT_TYPE.ORDER_TYPE -->
+        订单类型: {{ getDictLabel(DICT_TYPE.ORDER_TYPE, props.orderInfo?.type) }}
       </div>
       <div class="order-item-container-text">
         仓库: {{ props.orderInfo?.warehouseName }}
