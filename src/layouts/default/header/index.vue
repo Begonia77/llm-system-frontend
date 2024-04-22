@@ -30,6 +30,9 @@ const Header = Layout.Header
 const SettingDrawer = createAsyncComponent(() => import('@/layouts/default/setting/index.vue'), {
   loading: true,
 })
+const AssistantDrawer = createAsyncComponent(() => import('@/layouts/default/assistant/index.vue'), {
+  loading: true,
+})
 const { prefixCls } = useDesign('layout-header')
 const { getShowTopMenu, getShowHeaderTrigger, getSplit, getIsMixMode, getMenuWidth, getIsMixSidebar } = useMenuSetting()
 const { getUseErrorHandle, getShowSettingButton, getSettingButtonPosition } = useRootSetting()
@@ -125,6 +128,7 @@ const getMenuMode = computed(() => {
       <UserDropDown :theme="getHeaderTheme" />
 
       <SettingDrawer v-if="getShowSetting" :class="`${prefixCls}-action__item`" />
+      <AssistantDrawer :class="`${prefixCls}-action__item`" />
     </div>
   </Header>
 </template>

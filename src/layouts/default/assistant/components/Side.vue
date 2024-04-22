@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { message } from 'ant-design-vue';
 import { useUserStore } from '@/store/modules/user'
 import headerImg from '@/assets/images/header.jpg'
 
@@ -14,7 +15,10 @@ const getUserInfo = computed(() => {
 const inputText = ref<string>('')
 
 function send() {
-  console.log('send', inputText.value)
+  if (!inputText.value) {
+    message.info('请输入操作')
+    return
+  }
   chatList.value.push({
     id: chatList.value.length + 1,
     user: 'user',
