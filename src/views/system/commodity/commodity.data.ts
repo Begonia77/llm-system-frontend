@@ -4,18 +4,18 @@ import {DICT_TYPE, getDictOptions} from '@/utils/dict'
 
 export const columns: BasicColumn[] = [
   {
-    title: '产品名称',
+    title: '商品名称',
     dataIndex: 'name',
     width: 160
   },
   {
-    title: '产品分类',
-    dataIndex: 'category',
+    title: '商品分类',
+    dataIndex: 'categoryName',
     width: 160
   },
   {
     title: '品牌',
-    dataIndex: 'brand',
+    dataIndex: 'brandName',
     width: 160
   },
   {
@@ -27,12 +27,17 @@ export const columns: BasicColumn[] = [
     },
   },
   {
-    title: '产品描述',
+    title: '商品规格',
+    dataIndex: 'specification',
+    width: 160
+  },
+  {
+    title: '商品描述',
     dataIndex: 'description',
     width: 160
   },
   {
-    title: '产品图片',
+    title: '商品图片',
     dataIndex: 'imageUrl',
     width: 160
   },
@@ -71,20 +76,20 @@ export const columns: BasicColumn[] = [
 
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '产品名称',
+    label: '商品名称',
     field: 'name',
     component: 'Input',
     colProps: { span: 8 }
   },
   {
-    label: '产品分类',
-    field: 'category',
+    label: '商品分类',
+    field: 'categoryName',
     component: 'Input',
     colProps: { span: 8 }
   },
   {
     label: '品牌',
-    field: 'brand',
+    field: 'brandName',
     component: 'Input',
     colProps: { span: 8 }
   },
@@ -113,30 +118,50 @@ export const createFormSchema: FormSchema[] = [
     component: 'Input'
   },
   {
-    label: '产品名称',
+    label: '商品名称',
     field: 'name',
     required: true,
     component: 'Input'
   },
   {
-    label: '产品分类',
-    field: 'category',
+    label: '商品分类',
+    field: 'categoryId',
     required: true,
-    component: 'Input'
+    component: 'Select',
+    componentProps: {
+      options: [
+        { label: 'a', value: 1 },
+        { label: 'b', value: 2 },
+        { label: 'c', value: 3 },
+      ],
+    }
   },
   {
     label: '品牌',
-    field: 'brand',
+    field: 'brandId',
     required: true,
+    // 类型为下拉框，且内容是a：1，b：2，c：3
+    component: 'Select',
+    componentProps: {
+      options: [
+        { label: 'a', value: 1 },
+        { label: 'b', value: 2 },
+        { label: 'c', value: 3 },
+      ],
+    }
+  },
+  {
+    label: '商品规格',
+    field: 'specification',
     component: 'Input'
   },
   {
-    label: '产品描述',
+    label: '商品描述',
     field: 'description',
     component: 'InputTextArea'
   },
   {
-    label: '产品图片',
+    label: '商品图片',
     field: 'imageUrl',
     component: 'FileUpload',
     componentProps: {
@@ -180,30 +205,35 @@ export const updateFormSchema: FormSchema[] = [
     component: 'Input'
   },
   {
-    label: '产品名称',
+    label: '商品名称',
     field: 'name',
     required: true,
     component: 'Input'
   },
   {
-    label: '产品分类',
-    field: 'category',
+    label: '商品分类',
+    field: 'categoryName',
     required: true,
     component: 'Input'
   },
   {
     label: '品牌',
-    field: 'brand',
+    field: 'brandName',
     required: true,
     component: 'Input'
   },
   {
-    label: '产品描述',
+    label: '商品规格',
+    field: 'specification',
+    component: 'Input'
+  },
+  {
+    label: '商品描述',
     field: 'description',
     component: 'InputTextArea'
   },
   {
-    label: '产品图片',
+    label: '商品图片',
     field: 'imageUrl',
     component: 'FileUpload',
     componentProps: {

@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { ref, unref } from 'vue'
-import { createFormSchema, updateFormSchema } from './products.data'
+import { createFormSchema, updateFormSchema } from './commodity.data'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useMessage } from '@/hooks/web/useMessage'
 import { BasicForm, useForm } from '@/components/Form'
 import { BasicModal, useModalInner } from '@/components/Modal'
-import { createProducts, getProducts, updateProducts } from '@/api/system/products'
+import { createCommodity, getCommodity, updateCommodity } from '@/api/system/commodity'
 
-defineOptions({ name: 'ProductsModal' })
+defineOptions({ name: 'CommodityModal' })
 
 const emit = defineEmits(['success', 'register'])
 
@@ -29,7 +29,7 @@ const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data
   isUpdate.value = !!data?.isUpdate
   if (unref(isUpdate)) {
     resetSchema(updateFormSchema)
-    const res = await getProducts(data.record.id)
+    const res = await getCommodity(data.record.id)
     setFieldsValue({ ...res })
   }
 })
@@ -39,9 +39,9 @@ async function handleSubmit() {
     const values = await validate()
     setModalProps({ confirmLoading: true })
     if (unref(isUpdate))
-      await updateProducts(values)
+      await updateCommodity(values)
     else
-      await createProducts(values)
+      await createCommodity(values)
 
     closeModal()
     emit('success')

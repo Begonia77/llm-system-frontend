@@ -1,22 +1,22 @@
 <script lang="ts" setup>
-import ProductsModal from './ProductsModal.vue'
-import { columns, searchFormSchema } from './products.data'
+import CommodityModal from './CommodityModal.vue'
+import { columns, searchFormSchema } from './commodity.data'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useMessage } from '@/hooks/web/useMessage'
 import { useModal } from '@/components/Modal'
 import { IconEnum } from '@/enums/appEnum'
 import { BasicTable, TableAction, useTable } from '@/components/Table'
-import { deleteProducts, exportProducts, getProductsPage } from '@/api/system/products'
+import { deleteCommodity, exportCommodity, getCommodityPage } from '@/api/system/commodity'
 
-defineOptions({ name: 'Products' })
+defineOptions({ name: 'Commodity' })
 
 const { t } = useI18n()
 const { createConfirm, createMessage } = useMessage()
 const [registerModal, { openModal }] = useModal()
 
 const [registerTable, { getForm, reload }] = useTable({
-  title: '产品列表',
-  api: getProductsPage,
+  title: '商品列表',
+  api: getCommodityPage,
   columns,
   formConfig: { labelWidth: 120, schemas: searchFormSchema },
   useSearchForm: true,
@@ -43,14 +43,14 @@ async function handleExport() {
     iconType: 'warning',
     content: t('common.exportMessage'),
     async onOk() {
-      await exportProducts(getForm().getFieldsValue())
+      await exportCommodity(getForm().getFieldsValue())
       createMessage.success(t('common.exportSuccessText'))
     },
   })
 }
 
 async function handleDelete(record: Recordable) {
-  await deleteProducts(record.id)
+  await deleteCommodity(record.id)
   createMessage.success(t('common.delSuccessText'))
   reload()
 }
@@ -60,10 +60,10 @@ async function handleDelete(record: Recordable) {
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button v-auth="['system:products:create']" type="primary" :pre-icon="IconEnum.ADD" @click="handleCreate">
+        <a-button v-auth="['system:commodity:create']" type="primary" :pre-icon="IconEnum.ADD" @click="handleCreate">
           {{ t('action.create') }}
         </a-button>
-        <a-button v-auth="['system:products:export']" :pre-icon="IconEnum.EXPORT" @click="handleExport">
+        <a-button v-auth="['system:commodity:export']" :pre-icon="IconEnum.EXPORT" @click="handleExport">
           {{ t('action.export') }}
         </a-button>
       </template>
@@ -71,12 +71,12 @@ async function handleDelete(record: Recordable) {
         <template v-if="column.key === 'action'">
           <TableAction
             :actions="[
-              { icon: IconEnum.EDIT, label: t('action.edit'), auth: 'system:products:update', onClick: handleEdit.bind(null, record) },
+              { icon: IconEnum.EDIT, label: t('action.edit'), auth: 'system:commodity:update', onClick: handleEdit.bind(null, record) },
               {
                 icon: IconEnum.DELETE,
                 danger: true,
                 label: t('action.delete'),
-                auth: 'system:products:delete',
+                auth: 'system:commodity:delete',
                 popConfirm: {
                   title: t('common.delMessage'),
                   placement: 'left',
@@ -88,6 +88,6 @@ async function handleDelete(record: Recordable) {
         </template>
       </template>
     </BasicTable>
-    <ProductsModal @register="registerModal" @success="reload()" />
+    <CommodityModal @register="registerModal" @success="reload()" />
   </div>
 </template>
