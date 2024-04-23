@@ -1,8 +1,55 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
-import { message } from 'ant-design-vue';
+import { message } from 'ant-design-vue'
 import { useUserStore } from '@/store/modules/user'
 import headerImg from '@/assets/images/header.jpg'
+import { postLlmFeature } from '@/api/llm';
+
+const tableDataSource = ref<any[]>([])
+const tableDataColumns = ref<any[]>([])
+
+const openDataModal = ref<boolean>(false)
+
+function showDataModal(tableData: any[]) {
+  tableDataSource.value = tableData
+  tableDataColumns.value = Object.keys(tableData[0]).map((item) => {
+    return {
+      title: item,
+      dataIndex: item,
+      key: item,
+    }
+  })
+  openDataModal.value = true
+}
+
+function hideDataModal() {
+  openDataModal.value = false
+}
+
+// const tableDataColumns = [
+//   {
+//     title: '仓库名称',
+//     dataIndex: '仓库名称',
+//     key: 'name',
+//   },
+//   {
+//     title: '仓库类型',
+//     dataIndex: '仓库类型',
+//     key: '仓库类型',
+//   },
+//   {
+//     title: '仓库地址',
+//     dataIndex: '仓库地址',
+//     key: '仓库地址',
+//   },
+//   {
+//     title: '库存上限',
+//     dataIndex: '库存上限',
+//     key: '库存上限',
+//   },
+// ]
+
+// import { postLlmFeature } from '@/api/llm'
 
 const chatList = ref<any>(localStorage.getItem('chatRecord') ? JSON.parse(localStorage.getItem('chatRecord') || '') : [])
 
@@ -14,15 +61,41 @@ const getUserInfo = computed(() => {
 
 const inputText = ref<string>('')
 
-function send() {
+async function send() {
   if (!inputText.value) {
     message.info('请输入操作')
     return
   }
+
+  // 进行发送操作
+  // 接口postLlmFeature
+  // console.log('inputText.value', inputText.value)
+  const res = await postLlmFeature({ question: inputText.value })
+  console.log('res', res)
+  // 模拟请求
+  // const res = {
+  //   code: 0,
+  //   data: {
+  //     type: 2,
+  //     tableData: [],
+  //     text: '采购订单是企业在采购过程中的重要文件，通过记录和跟踪供应商的交易历史和价格等信息，帮助企业评估供应商的可靠性和性价比，优化供应链管理。在进销存系统中，采购订单扮演着至关重要的角色，帮助企业实现高效的采购流程，降低成本，提高生产效率。',
+  //   },
+  // }
+  
+  console.log(res.data.data)
+
   chatList.value.push({
     id: chatList.value.length + 1,
     user: 'user',
     content: inputText.value,
+  })
+
+  chatList.value.push({
+    id: chatList.value.length + 1,
+    user: 'assistant',
+    content: res.data.data.text,
+    tableData: res.data.data.tableData,
+    type: res.data.data.type,
   })
 
   localStorage.setItem('chatRecord', JSON.stringify(chatList.value))
@@ -54,7 +127,7 @@ onMounted(() => {
   <div class="assistant-container">
     <div class="dialog-box">
       <div class="title">
-        与AI助手对话
+        AI助手
       </div>
       <div v-for="chat in chatList" :key="chat.id">
         <div v-if="chat.user === 'assistant'" class="assistant">
@@ -64,6 +137,9 @@ onMounted(() => {
             </div>
             <div class="assistant-info-name">
               {{ chat.user }}
+            </div>
+            <div v-if="chat.type === 1" class="assistant-info-data" @click="showDataModal(chat.tableData)">
+              查看数据
             </div>
           </div>
           <div class="assistant-bubble">
@@ -99,8 +175,20 @@ onMounted(() => {
         </a-popconfirm>
       </div>
     </div>
+
+    <div>
+      <a-modal v-model:open="openDataModal" title="数据展示" ok-text="确认" @ok="hideDataModal">
+        <a-table :data-source="tableDataSource" :columns="tableDataColumns" />
+      </a-modal>
+    </div>
   </div>
 </template>
+
+<style>
+.ant-modal .ant-modal-body {
+  padding: 20px 30px;
+}
+</style>
 
 <style scoped lang="less">
 .assistant {
@@ -123,6 +211,18 @@ onMounted(() => {
         height: 100%;
         border-radius: 100%;
       }
+    }
+
+    &-data {
+      width: 60px;
+      margin-left: 10px;
+      font-size: 10px;
+      line-height: 20px;
+      color: #fff;
+      text-align: center;
+      cursor: pointer;
+      background-color: #5965DB;
+      border-radius: 25px;
     }
   }
 

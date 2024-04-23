@@ -164,6 +164,8 @@ export interface GlobConfig {
   tenantEnable: string
   // 验证码开关
   captchaEnable: string
+  // python url
+  pythonUrl: string
 }
 export interface GlobEnvConfig {
   // Site title
@@ -176,7 +178,10 @@ export interface GlobEnvConfig {
   // Project abbreviation
   VITE_GLOB_APP_SHORT_NAME: string
   // Upload url
-  VITE_GLOB_UPLOAD_URL?: string
+  VITE_GLOB_UPLOAD_URL: string
+
+  // python url
+  VITE_GLOB_LLM_URL: string
   // 租户开关
   VITE_GLOB_APP_TENANT_ENABLE: string
   // 验证码开关

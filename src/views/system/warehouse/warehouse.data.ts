@@ -81,7 +81,7 @@ export const searchFormSchema: FormSchema[] = [
   },
   {
     label: '仓库负责人',
-    field: 'userId',
+    field: 'staffId',
     component: 'ApiSelect',
     componentProps: {
       api: () => getListSimpleUsers(),
@@ -142,7 +142,7 @@ export const createFormSchema: FormSchema[] = [
   },
   {
     label: '仓库负责人',
-    field: 'userId',
+    field: 'staffId',
     required: true,
     component: 'ApiSelect',
     componentProps: {
@@ -202,7 +202,7 @@ export const updateFormSchema: FormSchema[] = [
   },
   {
     label: '仓库负责人',
-    field: 'userId',
+    field: 'staffId',
     required: true,
     component: 'ApiSelect',
     componentProps: {
