@@ -4,23 +4,13 @@ import {DICT_TYPE, getDictOptions} from '@/utils/dict'
 
 export const columns: BasicColumn[] = [
   {
-    title: '联系人',
+    title: '品牌名称',
     dataIndex: 'name',
     width: 160
   },
   {
-    title: '联系电话',
-    dataIndex: 'mobile',
-    width: 160
-  },
-  {
-    title: '电子邮箱',
-    dataIndex: 'email',
-    width: 160
-  },
-  {
     title: '备注',
-    dataIndex: 'remarks',
+    dataIndex: 'remark',
     width: 160
   },
   {
@@ -43,14 +33,8 @@ export const columns: BasicColumn[] = [
 
 export const searchFormSchema: FormSchema[] = [
   {
-    label: '联系人',
+    label: '品牌名称',
     field: 'name',
-    component: 'Input',
-    colProps: { span: 8 }
-  },
-  {
-    label: '联系电话',
-    field: 'mobile',
     component: 'Input',
     colProps: { span: 8 }
   },
@@ -79,25 +63,14 @@ export const createFormSchema: FormSchema[] = [
     component: 'Input'
   },
   {
-    label: '联系人',
+    label: '品牌名称',
     field: 'name',
     required: true,
     component: 'Input'
   },
   {
-    label: '联系电话',
-    field: 'mobile',
-    required: true,
-    component: 'Input'
-  },
-  {
-    label: '电子邮箱',
-    field: 'email',
-    component: 'Input'
-  },
-  {
     label: '备注',
-    field: 'remarks',
+    field: 'remark',
     component: 'Input'
   },
   {
@@ -118,25 +91,14 @@ export const updateFormSchema: FormSchema[] = [
     component: 'Input'
   },
   {
-    label: '联系人',
+    label: '品牌名称',
     field: 'name',
     required: true,
     component: 'Input'
   },
   {
-    label: '联系电话',
-    field: 'mobile',
-    required: true,
-    component: 'Input'
-  },
-  {
-    label: '电子邮箱',
-    field: 'email',
-    component: 'Input'
-  },
-  {
     label: '备注',
-    field: 'remarks',
+    field: 'remark',
     component: 'Input'
   },
   {

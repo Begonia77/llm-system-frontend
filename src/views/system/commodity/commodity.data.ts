@@ -82,18 +82,6 @@ export const searchFormSchema: FormSchema[] = [
     colProps: { span: 8 }
   },
   {
-    label: '商品分类',
-    field: 'categoryName',
-    component: 'Input',
-    colProps: { span: 8 }
-  },
-  {
-    label: '品牌',
-    field: 'brandName',
-    component: 'Input',
-    colProps: { span: 8 }
-  },
-  {
     label: '状态',
     field: 'status',
     component: 'Radio',
