@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { ref, unref } from 'vue'
 import { Button } from 'ant-design-vue'
-import { createItemFormSchema, updateItemFormSchema } from './orderItem.data'
+import { createItemFormSchema, updateItemFormSchema } from './sellOrderItem.data'
 import { useI18n } from '@/hooks/web/useI18n'
 import { useMessage } from '@/hooks/web/useMessage'
 import { BasicForm, useForm } from '@/components/Form'
 import { BasicModal, useModalInner } from '@/components/Modal'
-import { createOrder, getOrder, updateOrder } from '@/api/system/order'
+import { createSellOrder, getSellOrder, updateSellOrder } from '@/api/system/sellOrder'
 import { getSimpleCommodity } from '@/api/system/commodity'
 
-defineOptions({ name: 'OrderModal' })
+defineOptions({ name: 'SellOrderModal' })
 
 const emit = defineEmits(['success', 'register'])
 
@@ -55,7 +55,7 @@ const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data
   isUpdate.value = !!data?.isUpdate
   if (unref(isUpdate)) {
     resetSchema(updateItemFormSchema)
-    const res = await getOrder(data.record.id)
+    const res = await getSellOrder(data.record.id)
     setFieldsValue({ ...res })
   }
 })
@@ -91,11 +91,11 @@ async function handleSubmit() {
     setModalProps({ confirmLoading: true })
     if (unref(isUpdate)) {
       itemValues.orderItems = itemOrder
-      await updateOrder(itemValues)
+      await updateSellOrder(itemValues)
     }
     else {
       itemValues.orderItems = itemOrder
-      await createOrder(itemValues)
+      await createSellOrder(itemValues)
     }
 
     closeModal()
