@@ -79,7 +79,7 @@ async function handleDelete(record: Recordable) {
         <template v-if="column.key === 'action'">
           <TableAction
             :actions="[
-              { icon: IconEnum.VIEW, label: t('action.view'), auth: 'system:order:view', onClick: handleView.bind(null, record) },
+              { icon: IconEnum.VIEW, label: t('action.view'), onClick: handleView.bind(null, record) },
               {
                 icon: IconEnum.DELETE,
                 danger: true,

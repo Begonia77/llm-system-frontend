@@ -5,7 +5,6 @@ import { watch } from 'vue'
 import { columns } from './sellOrderItem.data'
 import { getSellOrderItemPage } from '@/api/system/sellOrderItem'
 import { BasicTable, useTable } from '@/components/Table'
-import { DICT_TYPE, getDictLabel } from '@/utils/dict'
 
 interface Props {
   isViewDetail: boolean
@@ -21,7 +20,7 @@ const [registerTable, { reload }] = useTable({
   api: () => getSellOrderItemPage({
     page: 1,
     pageSize: 10,
-    orderId: props.orderId,
+    sellOrderId: props.orderId,
   }),
   columns,
 })
@@ -42,7 +41,7 @@ watch(() => props.orderId, (_, oldValue) => {
   <div class="order-item-container">
     <Modal :open="props.isViewDetail" width="900px" title="订单详情" @ok="handleOk" @cancel="handleOk">
       <div class="order-item-container-text">
-        客户/供应商: {{ props.orderInfo?.clientName }}
+        客户: {{ props.orderInfo?.clientName }}
       </div>
       <div class="order-item-container-text">
         业务员: {{ props.orderInfo?.userNickname }}
@@ -62,11 +61,6 @@ watch(() => props.orderId, (_, oldValue) => {
       <!-- <div class="order-item-container-text">
         总金额: {{ props.orderInfo?.totalAmount || 0 }}
       </div> -->
-      <div class="order-item-container-text">
-        <!-- 订单类型: {{ props.orderInfo?.type }} -->
-        <!-- 使用字典DICT_TYPE.ORDER_TYPE -->
-        订单类型: {{ getDictLabel(DICT_TYPE.ORDER_TYPE, props.orderInfo?.type) }}
-      </div>
       <div class="order-item-container-text">
         仓库: {{ props.orderInfo?.warehouseName }}
       </div>
