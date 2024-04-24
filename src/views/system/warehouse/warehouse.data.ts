@@ -42,7 +42,7 @@ export const columns: BasicColumn[] = [
   },
   {
     title: '备注',
-    dataIndex: 'remarks',
+    dataIndex: 'remark',
     width: 160,
   },
   {
@@ -159,7 +159,7 @@ export const createFormSchema: FormSchema[] = [
   },
   {
     label: '备注',
-    field: 'remarks',
+    field: 'remark',
     component: 'Input',
   },
   {
@@ -219,7 +219,7 @@ export const updateFormSchema: FormSchema[] = [
   },
   {
     label: '备注',
-    field: 'remarks',
+    field: 'remark',
     component: 'Input',
   },
   {

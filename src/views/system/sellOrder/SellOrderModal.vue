@@ -6,7 +6,7 @@ import { useI18n } from '@/hooks/web/useI18n'
 import { useMessage } from '@/hooks/web/useMessage'
 import { BasicForm, useForm } from '@/components/Form'
 import { BasicModal, useModalInner } from '@/components/Modal'
-import { createSellOrder, getSellOrder, updateSellOrder } from '@/api/system/sellOrder'
+import { createSellOrder, getSellOrder } from '@/api/system/sellOrder'
 import { getSimpleCommodity } from '@/api/system/commodity'
 
 defineOptions({ name: 'SellOrderModal' })
@@ -66,7 +66,7 @@ async function handleSubmit() {
 
     for (let i = 0; i < n.value; i++) {
       for (let j = i + 1; j < n.value; j++) {
-        if (itemValues[`productId${i}`] && itemValues[`productId${j}`] && itemValues[`productId${i}`] === itemValues[`productId${j}`]) {
+        if (itemValues[`commodityId${i}`] && itemValues[`commodityId${j}`] && itemValues[`commodityId${i}`] === itemValues[`commodityId${j}`]) {
           createMessage.error('购买商品重复，请进行修改')
           return
         }
@@ -75,13 +75,13 @@ async function handleSubmit() {
 
     const itemOrder: any = []
     for (let i = 0; i < n.value; i++) {
-      if (itemValues[`productId${i}`]) {
+      if (itemValues[`commodityId${i}`]) {
         itemOrder.push({
-          productId: itemValues[`productId${i}`],
+          commodityId: itemValues[`commodityId${i}`],
           quantity: itemValues[`quantity${i}`],
           price: itemValues[`price${i}`],
         })
-        delete itemValues[`productId${i}`]
+        delete itemValues[`commodityId${i}`]
         delete itemValues[`quantity${i}`]
         delete itemValues[`price${i}`]
         delete itemValues[`${i}`]
@@ -89,14 +89,8 @@ async function handleSubmit() {
     }
 
     setModalProps({ confirmLoading: true })
-    if (unref(isUpdate)) {
-      itemValues.orderItems = itemOrder
-      await updateSellOrder(itemValues)
-    }
-    else {
-      itemValues.orderItems = itemOrder
+      itemValues.sellOrderItems = itemOrder
       await createSellOrder(itemValues)
-    }
 
     closeModal()
     emit('success')
@@ -111,7 +105,7 @@ function appendField() {
   appendSchemaByField(
     [
       {
-        field: `productId${n.value}`,
+        field: `commodityId${n.value}`,
         component: 'Select',
         componentProps: (data) => {
           return {
@@ -122,11 +116,11 @@ function appendField() {
 
               const { getFieldsValue } = formActionType
               const resultValue = getFieldsValue()
-              const product = commodityList.value.find((item: any) => item.id === e)
+              const commodity = commodityList.value.find((item: any) => item.id === e)
               if (resultValue.type === 1)
-                formModel[`price${schema.field.replace('productId', '')}`] = product.purchasePrice
+                formModel[`price${schema.field.replace('commodityId', '')}`] = commodity.purchasePrice
               else
-                formModel[`price${schema.field.replace('productId', '')}`] = product.salePrice
+                formModel[`price${schema.field.replace('commodityId', '')}`] = commodity.salePrice
             },
           }
         },
@@ -170,7 +164,7 @@ function appendField() {
 }
 
 function del(field: number) {
-  removeSchemaByField([`productId${field}`, `quantity${field}`, `price${field}`, `${field}`])
+  removeSchemaByField([`commodityId${field}`, `quantity${field}`, `price${field}`, `${field}`])
   num.value--
 }
 </script>

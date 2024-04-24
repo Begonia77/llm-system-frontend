@@ -33,7 +33,7 @@ function handleOk(e: MouseEvent) {
 }
 
 watch(() => props.orderId, (_, oldValue) => {
-  if (oldValue) 
+  if (oldValue)
     reload()
 })
 </script>
@@ -57,7 +57,7 @@ watch(() => props.orderId, (_, oldValue) => {
         订单单号: {{ props.orderInfo?.orderNumber }}
       </div>
       <div class="order-item-container-text">
-        备注: {{ props.orderInfo?.remarks || '无' }}
+        备注: {{ props.orderInfo?.remark || '无' }}
       </div>
       <!-- <div class="order-item-container-text">
         总金额: {{ props.orderInfo?.totalAmount || 0 }}

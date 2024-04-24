@@ -24,8 +24,8 @@ getchannelList()
 
 export const columns: BasicColumn[] = [
   {
-    title: '产品',
-    dataIndex: 'productName',
+    title: '商品',
+    dataIndex: 'commodityName',
     width: 160,
   },
   {
@@ -47,30 +47,6 @@ export const columns: BasicColumn[] = [
   },
 ]
 
-export const searchItemFormSchema: FormSchema[] = [
-  // {
-  //   label: '备注',
-  //   field: 'remarks',
-  //   component: 'Input',
-  //   colProps: { span: 8 },
-  // },
-  // {
-  //   label: '状态',
-  //   field: 'status',
-  //   component: 'Radio',
-  //   componentProps: {
-  //       options: getDictOptions(DICT_TYPE.COMMON_STATUS),
-  //   },
-  //   colProps: { span: 8 }
-  // },
-  // {
-  //   label: '创建时间',
-  //   field: 'createTime',
-  //   component: 'RangePicker',
-  //   colProps: { span: 8 },
-  // },
-]
-
 export const createItemFormSchema: FormSchema[] = [
   {
     label: '编号',
@@ -78,14 +54,9 @@ export const createItemFormSchema: FormSchema[] = [
     show: false,
     component: 'Input',
   },
-  // {
-  //   label: '订单单号',
-  //   field: 'orderNumber',
-  //   component: 'Input',
-  // },
   {
     label: '业务员',
-    field: 'userId',
+    field: 'staffId',
     component: 'ApiSelect',
     componentProps: {
       api: () => getListSimpleUsers(),
@@ -105,16 +76,7 @@ export const createItemFormSchema: FormSchema[] = [
     },
   },
   {
-    label: '订单类型',
-    field: 'type',
-    required: true,
-    component: 'Select',
-    componentProps: {
-      options: getDictOptions(DICT_TYPE.ORDER_TYPE, 'number'),
-    },
-  },
-  {
-    label: '客户/供应商',
+    label: '客户',
     field: 'clientId',
     component: 'ApiSelect',
     componentProps: {
@@ -125,18 +87,9 @@ export const createItemFormSchema: FormSchema[] = [
   },
   {
     label: '备注',
-    field: 'remarks',
+    field: 'remark',
     component: 'Input',
   },
-  // {
-  //   label: '状态',
-  //   field: 'status',
-  //   required: true,
-  //   component: 'RadioButtonGroup',
-  //   componentProps: {
-  //     options: getDictOptions(DICT_TYPE.COMMON_STATUS, 'number'),
-  //   },
-  // },
   {
     field: 'title',
     label: '',
@@ -144,22 +97,17 @@ export const createItemFormSchema: FormSchema[] = [
     slot: 'title',
   },
   {
-    field: 'productId0',
+    field: 'commodityId0',
     component: 'Select',
     colProps: { span: 7 },
     required: true,
-    componentProps: ({ formModel, formActionType }) => {
+    componentProps: ({ formModel }) => {
       return {
         options: commodityList.value,
         placeholder: '请选择商品',
         onChange: (e: any) => {
-          const { getFieldsValue } = formActionType
-          const resultValue = getFieldsValue()
-          const product = commodityList.value.find((item: any) => item.id === e)
-          if (resultValue.type === 1)
-            formModel.price0 = product.purchasePrice
-          else
-            formModel.price0 = product.salePrice
+          const commodity = commodityList.value.find((item: any) => item.id === e)
+          formModel.price0 = commodity.salePrice
         },
       }
     },
@@ -197,7 +145,7 @@ export const createItemFormSchema: FormSchema[] = [
 
 export const updateItemFormSchema: FormSchema[] = [
   {
-    field: 'productId0',
+    field: 'commodityId0',
     component: 'ApiSelect',
     componentProps: {
       api: () => getSimpleCommodity(),

@@ -68,10 +68,10 @@ async function handleDelete(record: Recordable) {
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button v-auth="['system:purchaseOrder:create']" type="primary" :pre-icon="IconEnum.ADD" @click="handleCreate">
+        <a-button type="primary" :pre-icon="IconEnum.ADD" @click="handleCreate">
           {{ t('action.create') }}
         </a-button>
-        <a-button v-auth="['system:purchaseOrder:export']" :pre-icon="IconEnum.EXPORT" @click="handleExport">
+        <a-button :pre-icon="IconEnum.EXPORT" @click="handleExport">
           {{ t('action.export') }}
         </a-button>
       </template>
@@ -79,12 +79,11 @@ async function handleDelete(record: Recordable) {
         <template v-if="column.key === 'action'">
           <TableAction
             :actions="[
-              { icon: IconEnum.VIEW, label: t('action.view'), auth: 'system:purchaseOrder:view', onClick: handleView.bind(null, record) },
+              { icon: IconEnum.VIEW, label: t('action.view'), onClick: handleView.bind(null, record) },
               {
                 icon: IconEnum.DELETE,
                 danger: true,
                 label: t('action.delete'),
-                auth: 'system:purchaseOrder:delete',
                 popConfirm: {
                   title: t('common.delMessage'),
                   placement: 'left',
@@ -97,6 +96,6 @@ async function handleDelete(record: Recordable) {
       </template>
     </BasicTable>
     <PurchaseOrderModal @register="registerModal" @success="reload()" />
-    <PurchaseOrderDetail :purchaseOrder-data="purchaseOrderData" :purchaseOrder-id="purchaseOrderInfo.id" :purchaseOrder-info="purchaseOrderInfo" :is-view-detail="isViewDetail" @close="handleView" />
+    <PurchaseOrderDetail :order-data="purchaseOrderData" :order-id="purchaseOrderInfo.id" :order-info="purchaseOrderInfo" :is-view-detail="isViewDetail" @close="handleView" />
   </div>
 </template>

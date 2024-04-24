@@ -50,7 +50,7 @@ export const columns: BasicColumn[] = [
 export const searchItemFormSchema: FormSchema[] = [
   // {
   //   label: '备注',
-  //   field: 'remarks',
+  //   field: 'remark',
   //   component: 'Input',
   //   colProps: { span: 8 },
   // },
@@ -125,7 +125,7 @@ export const createItemFormSchema: FormSchema[] = [
   },
   {
     label: '备注',
-    field: 'remarks',
+    field: 'remark',
     component: 'Input',
   },
   // {
