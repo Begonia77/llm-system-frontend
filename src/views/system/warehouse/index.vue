@@ -60,10 +60,10 @@ async function handleDelete(record: Recordable) {
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button v-auth="['system:warehouse:create']" type="primary" :pre-icon="IconEnum.ADD" @click="handleCreate">
+        <a-button type="primary" :pre-icon="IconEnum.ADD" @click="handleCreate">
           {{ t('action.create') }}
         </a-button>
-        <a-button v-auth="['system:warehouse:export']" :pre-icon="IconEnum.EXPORT" @click="handleExport">
+        <a-button :pre-icon="IconEnum.EXPORT" @click="handleExport">
           {{ t('action.export') }}
         </a-button>
       </template>
@@ -71,12 +71,11 @@ async function handleDelete(record: Recordable) {
         <template v-if="column.key === 'action'">
           <TableAction
             :actions="[
-              { icon: IconEnum.EDIT, label: t('action.edit'), auth: 'system:warehouse:update', onClick: handleEdit.bind(null, record) },
+              { icon: IconEnum.EDIT, label: t('action.edit'), onClick: handleEdit.bind(null, record) },
               {
                 icon: IconEnum.DELETE,
                 danger: true,
                 label: t('action.delete'),
-                auth: 'system:warehouse:delete',
                 popConfirm: {
                   title: t('common.delMessage'),
                   placement: 'left',

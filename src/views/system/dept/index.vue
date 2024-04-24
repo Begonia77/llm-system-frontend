@@ -86,7 +86,7 @@ onMounted(async () => {
   <div>
     <BasicTable @register="register" @fetch-success="onFetchSuccess">
       <template #toolbar>
-        <a-button v-auth="['system:dept:create']" type="primary" :pre-icon="IconEnum.ADD" @click="handleCreate">
+        <a-button type="primary" :pre-icon="IconEnum.ADD" @click="handleCreate">
           {{ t('action.create') }}
         </a-button>
         <a-button @click="expandAll">
@@ -103,12 +103,11 @@ onMounted(async () => {
         <template v-if="column.key === 'action'">
           <TableAction
             :actions="[
-              { icon: IconEnum.EDIT, label: t('action.edit'), auth: 'system:dept:update', onClick: handleEdit.bind(null, record) },
+              { icon: IconEnum.EDIT, label: t('action.edit'), onClick: handleEdit.bind(null, record) },
               {
                 icon: IconEnum.DELETE,
                 danger: true,
                 label: t('action.delete'),
-                auth: 'system:dept:delete',
                 popConfirm: {
                   title: t('common.delMessage'),
                   placement: 'left',

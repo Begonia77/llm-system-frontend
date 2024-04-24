@@ -48,42 +48,23 @@ async function handleExport() {
     },
   })
 }
-
-async function handleDelete(record: Recordable) {
-  await deleteSupplier(record.id)
-  createMessage.success(t('common.delSuccessText'))
-  reload()
-}
 </script>
 
 <template>
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button v-auth="['system:supplier:create']" type="primary" :pre-icon="IconEnum.ADD" @click="handleCreate">
+        <a-button type="primary" :pre-icon="IconEnum.ADD" @click="handleCreate">
           {{ t('action.create') }}
         </a-button>
-        <a-button v-auth="['system:supplier:export']" :pre-icon="IconEnum.EXPORT" @click="handleExport">
+        <a-button :pre-icon="IconEnum.EXPORT" @click="handleExport">
           {{ t('action.export') }}
         </a-button>
       </template>
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'action'">
           <TableAction
-            :actions="[
-              { icon: IconEnum.EDIT, label: t('action.edit'), auth: 'system:supplier:update', onClick: handleEdit.bind(null, record) },
-              {
-                icon: IconEnum.DELETE,
-                danger: true,
-                label: t('action.delete'),
-                auth: 'system:supplier:delete',
-                popConfirm: {
-                  title: t('common.delMessage'),
-                  placement: 'left',
-                  confirm: handleDelete.bind(null, record),
-                },
-              },
-            ]"
+            :actions="[{icon: IconEnum.EDIT, label: t('action.edit'), onClick: handleEdit.bind(null, record)}]"
           />
         </template>
       </template>
