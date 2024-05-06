@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { message } from 'ant-design-vue'
+import dayjs from 'dayjs'
 import { useUserStore } from '@/store/modules/user'
 import headerImg from '@/assets/images/header.jpg'
-import { postLlmFeature } from '@/api/llm';
+import { postLlmFeature } from '@/api/llm'
 
 const tableDataSource = ref<any[]>([])
 const tableDataColumns = ref<any[]>([])
@@ -17,6 +18,10 @@ function showDataModal(tableData: any[]) {
       title: item,
       dataIndex: item,
       key: item,
+      minWidth: 100,
+      maxWidth: 200,
+      ellipsis: true,
+      resizable: true,
     }
   })
   openDataModal.value = true
@@ -61,6 +66,18 @@ const getUserInfo = computed(() => {
 
 const inputText = ref<string>('')
 
+function processTableData(tableData: any[]) {
+  const data = tableData.map((item) => {
+    const keys = Object.keys(item)
+    keys.forEach((key) => {
+      if (key.match(/时间|time/i))
+        item[key] = item[key] ? dayjs(item[key]).format('YYYY-MM-DD HH:mm:ss') : ''
+    })
+    return item
+  })
+  return data
+}
+
 async function send() {
   if (!inputText.value) {
     message.info('请输入操作')
@@ -81,7 +98,7 @@ async function send() {
   //     text: '采购订单是企业在采购过程中的重要文件，通过记录和跟踪供应商的交易历史和价格等信息，帮助企业评估供应商的可靠性和性价比，优化供应链管理。在进销存系统中，采购订单扮演着至关重要的角色，帮助企业实现高效的采购流程，降低成本，提高生产效率。',
   //   },
   // }
-  
+
   console.log(res.data.data)
 
   chatList.value.push({
@@ -94,7 +111,7 @@ async function send() {
     id: chatList.value.length + 1,
     user: 'assistant',
     content: res.data.data.text,
-    tableData: res.data.data.tableData,
+    tableData: processTableData(res.data.data.tableData),
     type: res.data.data.type,
   })
 
@@ -177,7 +194,7 @@ onMounted(() => {
     </div>
 
     <div>
-      <a-modal v-model:open="openDataModal" title="数据展示" ok-text="确认" @ok="hideDataModal">
+      <a-modal v-model:open="openDataModal" width="1300px" title="数据展示" ok-text="确认" style="height: 600px;" @ok="hideDataModal">
         <a-table :data-source="tableDataSource" :columns="tableDataColumns" />
       </a-modal>
     </div>
@@ -229,8 +246,10 @@ onMounted(() => {
   &-bubble {
     display: inline-block;
     padding: 6px 8px 6px 10px;
-    margin-right: 40px;
+    margin-right: 35px;
+    margin-left: 10px;
     color: #fff;
+    word-break: break-all;
     background-color: #5965DB;
     border-radius: 5px;
   }
@@ -263,18 +282,19 @@ onMounted(() => {
   &-bubble {
     display: inline-block;
     padding: 6px 10px 6px 8px;
-    margin-left: 40px;
+    margin-right: 10px;
+    margin-left: 35px;
     color: #51606D;
+    text-align: left;
+    word-break: break-all;
     background-color: #EAEFF4;
     border-radius: 5px;
   }
 }
 
 .assistant-container {
-  /* color: red; */
   width: 100%;
   height: 90vh;
-  // padding-top: 10px;
   margin-top: 10px;
   margin-left: 7px;
   overflow: auto scroll;
