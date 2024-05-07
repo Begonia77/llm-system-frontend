@@ -50,7 +50,7 @@ watch(() => props.orderId, (_, oldValue) => {
         创建时间: {{ dayjs(props.orderInfo?.createTime).format('YYYY-MM-DD HH:mm:ss') }}
       </div>
       <div class="order-item-container-text">
-        购买数量: {{ props.orderInfo?.totalQuantity }}
+        销售种类: {{ props.orderInfo?.totalQuantity }}
       </div>
       <div class="order-item-container-text">
         订单单号: {{ props.orderInfo?.orderNumber }}
@@ -58,13 +58,10 @@ watch(() => props.orderId, (_, oldValue) => {
       <div class="order-item-container-text">
         备注: {{ props.orderInfo?.remark || '无' }}
       </div>
-      <!-- <div class="order-item-container-text">
-        总金额: {{ props.orderInfo?.totalAmount || 0 }}
-      </div> -->
       <div class="order-item-container-text">
         仓库: {{ props.orderInfo?.warehouseName }}
       </div>
-      <BasicTable @register="registerTable" />
+      <BasicTable :max-height="600" @register="registerTable" />
     </Modal>
   </div>
 </template>

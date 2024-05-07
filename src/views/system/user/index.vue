@@ -109,12 +109,6 @@ function handleSelect(deptId = '') {
             :drop-down-actions="[
               {
                 icon: IconEnum.EDIT,
-                label: '分配角色',
-                auth: 'system:permission:assign-user-role',
-                onClick: handleRole.bind(null, record),
-              },
-              {
-                icon: IconEnum.EDIT,
                 label: '重置密码',
                 auth: 'system:user:update-password',
                 onClick: handleResetPwd.bind(null, record),

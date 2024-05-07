@@ -32,7 +32,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'deptId',
     width: 120,
     customRender: ({ record }) => {
-      return useRender.renderTag(record.dept && record.dept.name)
+      return record.deptName
     },
   },
   {
@@ -185,18 +185,18 @@ export const formSchema: FormSchema[] = [
       options: getDictOptions(DICT_TYPE.SYSTEM_USER_SEX),
     },
   },
-  {
-    label: '岗位',
-    field: 'postIds',
-    component: 'ApiSelect',
-    defaultValue: [],
-    componentProps: {
-      api: () => listSimplePosts(),
-      labelField: 'name',
-      valueField: 'id',
-      mode: 'tags',
-    },
-  },
+  // {
+  //   label: '岗位',
+  //   field: 'postIds',
+  //   component: 'ApiSelect',
+  //   defaultValue: [],
+  //   componentProps: {
+  //     api: () => listSimplePosts(),
+  //     labelField: 'name',
+  //     valueField: 'id',
+  //     mode: 'tags',
+  //   },
+  // },
   {
     label: '状态',
     field: 'status',

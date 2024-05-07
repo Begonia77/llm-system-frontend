@@ -31,7 +31,7 @@ export const columns: BasicColumn[] = [
     width: 160,
   },
   {
-    title: '购买数量',
+    title: '采购种类',
     dataIndex: 'totalQuantity',
     width: 160,
   },

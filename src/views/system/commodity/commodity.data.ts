@@ -39,11 +39,6 @@ export const columns: BasicColumn[] = [
     width: 160,
   },
   {
-    title: '商品图片',
-    dataIndex: 'imageUrl',
-    width: 160,
-  },
-  {
     title: '进货价',
     dataIndex: 'purchasePrice',
     width: 160,
@@ -122,6 +117,8 @@ export const createFormSchema: FormSchema[] = [
       api: () => getSimpleCategory(),
       labelField: 'name',
       valueField: 'id',
+      showSearch: true,
+      optionFilterProp: 'label',
     },
   },
   {
@@ -133,6 +130,8 @@ export const createFormSchema: FormSchema[] = [
       api: () => getSimpleBrand(),
       labelField: 'name',
       valueField: 'id',
+      showSearch: true,
+      optionFilterProp: 'label',
     },
   },
   {
@@ -144,15 +143,6 @@ export const createFormSchema: FormSchema[] = [
     label: '商品描述',
     field: 'description',
     component: 'InputTextArea',
-  },
-  {
-    label: '商品图片',
-    field: 'imageUrl',
-    component: 'FileUpload',
-    componentProps: {
-      fileType: 'image',
-      maxCount: 1,
-    },
   },
   {
     label: '进货价',
@@ -204,6 +194,8 @@ export const updateFormSchema: FormSchema[] = [
       api: () => getSimpleCategory(),
       labelField: 'name',
       valueField: 'id',
+      showSearch: true,
+      optionFilterProp: 'label',
     },
   },
   {
@@ -215,6 +207,8 @@ export const updateFormSchema: FormSchema[] = [
       api: () => getSimpleBrand(),
       labelField: 'name',
       valueField: 'id',
+      showSearch: true,
+      optionFilterProp: 'label',
     },
   },
   {
@@ -226,15 +220,6 @@ export const updateFormSchema: FormSchema[] = [
     label: '商品描述',
     field: 'description',
     component: 'InputTextArea',
-  },
-  {
-    label: '商品图片',
-    field: 'imageUrl',
-    component: 'FileUpload',
-    componentProps: {
-      fileType: 'image',
-      maxCount: 1,
-    },
   },
   {
     label: '进货价',

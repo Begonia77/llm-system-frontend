@@ -1,23 +1,21 @@
 import { ref } from 'vue'
 import { getSimpleSupplier } from '@/api/system/supplier'
-import { getSimpleCommodity } from '@/api/system/commodity'
+import { getCommodityPage } from '@/api/system/commodity'
 import { getListSimpleUsers } from '@/api/system/user'
 import { getSimpleWarehouse } from '@/api/system/warehouse'
 import type { BasicColumn, FormSchema } from '@/components/Table'
-import { DICT_TYPE, getDictOptions } from '@/utils/dict'
 
 const commodityList = ref<any[]>([])
 async function getchannelList() {
-  const res = await getSimpleCommodity()
-  commodityList.value = res
+  const res = await getCommodityPage({ pageSize: 100, pageNo: 1 })
+  commodityList.value = res.list
   commodityList.value = commodityList.value.map((item: any) => {
     return {
       ...item,
-      label: item.name,
+      label: `${item.brandName}/${item.name}-${item.specification}`,
       value: item.id,
     }
   })
-  console.log('commodityList.value', commodityList.value)
 }
 
 getchannelList()
@@ -57,6 +55,7 @@ export const createItemFormSchema: FormSchema[] = [
   {
     label: '业务员',
     field: 'staffId',
+    required: true,
     component: 'ApiSelect',
     componentProps: {
       api: () => getListSimpleUsers(),
@@ -78,6 +77,7 @@ export const createItemFormSchema: FormSchema[] = [
   {
     label: '供应商',
     field: 'supplierId',
+    required: true,
     component: 'ApiSelect',
     componentProps: {
       api: () => getSimpleSupplier(),
@@ -99,7 +99,7 @@ export const createItemFormSchema: FormSchema[] = [
   {
     field: 'commodityId0',
     component: 'Select',
-    colProps: { span: 7 },
+    colProps: { span: 10 },
     required: true,
     componentProps: ({ formModel }) => {
       return {
@@ -109,23 +109,25 @@ export const createItemFormSchema: FormSchema[] = [
           const commodity = commodityList.value.find((item: any) => item.id === e)
           formModel.price0 = commodity.purchasePrice
         },
+        showSearch: true,
+        optionFilterProp: 'label',
       }
     },
   },
   {
     field: 'quantity0',
     component: 'InputNumber',
-    colProps: { span: 5, offset: 1 },
+    colProps: { span: 3, offset: 1 },
     required: true,
+    defaultValue: 1,
     componentProps: {
-      defaultValue: 1,
       min: 1,
     },
   },
   {
     field: 'price0',
     component: 'InputNumber',
-    colProps: { span: 5, offset: 1 },
+    colProps: { span: 4, offset: 1 },
     required: true,
     componentProps: {
       defaultValue: 0,
@@ -148,7 +150,7 @@ export const updateItemFormSchema: FormSchema[] = [
     field: 'commodityId0',
     component: 'ApiSelect',
     componentProps: {
-      api: () => getSimpleCommodity(),
+      api: () => getCommodityPage({ pageSize: 100, pageNo: 1 }),
       labelField: 'name',
       valueField: 'id',
     },

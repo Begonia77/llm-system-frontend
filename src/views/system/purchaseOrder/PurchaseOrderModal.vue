@@ -7,7 +7,7 @@ import { useMessage } from '@/hooks/web/useMessage'
 import { BasicForm, useForm } from '@/components/Form'
 import { BasicModal, useModalInner } from '@/components/Modal'
 import { createPurchaseOrder, getPurchaseOrder } from '@/api/system/purchaseOrder'
-import { getSimpleCommodity } from '@/api/system/commodity'
+import { getCommodityPage } from '@/api/system/commodity'
 
 defineOptions({ name: 'PurchaseOrderModal' })
 
@@ -21,25 +21,18 @@ const num = ref(1)
 
 const commodityList = ref<any[]>([])
 async function getchannelList() {
-  const res = await getSimpleCommodity()
-  commodityList.value = res
+  const res = await getCommodityPage({ pageSize: 100, pageNo: 1 })
+  commodityList.value = res.list
   commodityList.value = commodityList.value.map((item: any) => {
     return {
       ...item,
-      label: item.name,
+      label: `${item.brandName}/${item.name} - ${item.specification}`,
       value: item.id,
     }
   })
 }
 
 getchannelList()
-// const [registerForm, { setFieldsValue, resetFields, resetSchema, validate }] = useForm({
-//   labelWidth: 120,
-//   baseColProps: { span: 24 },
-//   schemas: createFormSchema,
-//   showActionButtonGroup: false,
-//   actionColOptions: { span: 23 },
-// })
 
 const [registerItemForm, { resetFields, resetSchema, setFieldsValue, validate: itemValidate, appendSchemaByField, removeSchemaByField }] = useForm({
   labelWidth: 120,
@@ -108,6 +101,7 @@ function appendField() {
         field: `commodityId${n.value}`,
         component: 'Select',
         componentProps: (data) => {
+          console.log(commodityList.value)
           return {
             options: commodityList.value,
             placeholder: '请选择商品',
@@ -122,16 +116,18 @@ function appendField() {
               else
                 formModel[`price${schema.field.replace('commodityId', '')}`] = commodity.salePrice
             },
+            showSearch: true,
+            optionFilterProp: 'label',
           }
         },
         required: true,
-        colProps: { span: 7 },
+        colProps: { span: 10 },
       },
       {
         field: `quantity${n.value}`,
         component: 'InputNumber',
         required: true,
-        colProps: { span: 5, offset: 1 },
+        colProps: { span: 3, offset: 1 },
         defaultValue: 1,
         componentProps: {
           min: 1,
@@ -141,7 +137,7 @@ function appendField() {
         field: `price${n.value}`,
         component: 'InputNumber',
         required: true,
-        colProps: { span: 5, offset: 1 },
+        colProps: { span: 4, offset: 1 },
         defaultValue: 0,
         componentProps: {
           min: 0,
@@ -171,12 +167,11 @@ function del(field: number) {
 
 <template>
   <BasicModal v-bind="$attrs" :title="isUpdate ? t('action.edit') : t('action.create')" @register="registerModal" @ok="handleSubmit">
-    <!-- <BasicForm @register="registerForm" /> -->
     <BasicForm @register="registerItemForm">
       <template #title>
         <div class="order-item-title">
           <div class="order-item-title-name">
-            订单项名称
+            商品及规格
           </div>
           <div class="order-item-title-number">
             数量
@@ -185,14 +180,14 @@ function del(field: number) {
             单价
           </div>
           <div class="order-item-title-button">
-            <Button @click="appendField">
+            <Button type="primary" @click="appendField">
               增加
             </Button>
           </div>
         </div>
       </template>
       <template #add="{ field }">
-        <Button v-if="num > 1" class="ml-2" @click="() => del(field)">
+        <Button v-if="num > 1" style="margin-left: -0.5rem;" danger @click="() => del(field)">
           -
         </Button>
       </template>
@@ -203,27 +198,27 @@ function del(field: number) {
 <style lang="less" scoped>
   .order-item-title {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
 
     &-name {
-      width: 29%;
+      width: 41%;
+      margin-right: 4%;
       text-align: center;
     }
 
     &-number {
-      width: 28%;
+      width: 13%;
+      margin-right: 4%;
       text-align: center;
     }
 
     &-price {
-      width: 21%;
+      width: 17%;
+      margin-right: 5%;
       text-align: center;
     }
 
     &-button {
-      width: 19%;
-      padding-left: 5%;
+      width: 16%;
     }
   }
 
