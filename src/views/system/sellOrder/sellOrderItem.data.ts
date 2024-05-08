@@ -30,13 +30,11 @@ export const columns: BasicColumn[] = [
     title: '数量',
     dataIndex: 'quantity',
     width: 160,
-    sorter: true,
   },
   {
     title: '价格',
     dataIndex: 'price',
     width: 160,
-    sorter: true,
   },
   {
     title: '单项总金额',

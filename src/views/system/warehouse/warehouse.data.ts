@@ -90,12 +90,6 @@ export const searchFormSchema: FormSchema[] = [
     },
     colProps: { span: 8 },
   },
-  // {
-  //   label: '库存上限',
-  //   field: 'maxInventory',
-  //   component: 'Input',
-  //   colProps: { span: 8 },
-  // },
   {
     label: '状态',
     field: 'status',

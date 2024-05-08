@@ -19,11 +19,11 @@ const emit = defineEmits(['close'])
 const [registerTable, { reload }] = useTable({
   api: () => getPurchaseOrderItemPage({
     page: 1,
-    pageSize: 10,
+    pageSize: 100,
     PurchaseOrderId: props.orderId,
   }),
   columns,
-  useSearchForm: true,
+  pagination: false,
 })
 
 function handleOk(e: MouseEvent) {

@@ -48,12 +48,6 @@ async function handleExport() {
     },
   })
 }
-
-async function handleDelete(record: Recordable) {
-  await deleteWarehouse(record.id)
-  createMessage.success(t('common.delSuccessText'))
-  reload()
-}
 </script>
 
 <template>
@@ -72,16 +66,6 @@ async function handleDelete(record: Recordable) {
           <TableAction
             :actions="[
               { icon: IconEnum.EDIT, label: t('action.edit'), onClick: handleEdit.bind(null, record) },
-              {
-                icon: IconEnum.DELETE,
-                danger: true,
-                label: t('action.delete'),
-                popConfirm: {
-                  title: t('common.delMessage'),
-                  placement: 'left',
-                  confirm: handleDelete.bind(null, record),
-                },
-              },
             ]"
           />
         </template>
