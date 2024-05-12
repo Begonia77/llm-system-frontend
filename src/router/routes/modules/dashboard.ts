@@ -25,15 +25,6 @@ const dashboard: AppRouteModule = {
         icon: 'ant-design:bar-chart-outlined',
       },
     },
-    {
-      path: 'workbench',
-      name: 'Workbench',
-      component: () => import('@/views/dashboard/workbench/index.vue'),
-      meta: {
-        title: t('routes.dashboard.workbench'),
-        icon: 'ant-design:appstore-outlined',
-      },
-    },
   ],
 }
 

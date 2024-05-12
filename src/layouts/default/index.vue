@@ -36,9 +36,7 @@ const layoutClass = computed(() => {
 </script>
 
 <template>
-  <div class="test" @click="isShowAssistant = !isShowAssistant">
-    click
-  </div>
+  <div class="test" @click="isShowAssistant = !isShowAssistant"/>
   <Layout class="min-h-full w-full flex flex-col" v-bind="lockEvents">
     <LayoutHeader v-if="getShowFullHeaderRef" fixed />
     <Layout :class="[layoutClass]">
@@ -64,7 +62,7 @@ const layoutClass = computed(() => {
   top: 0;
   right: 0;
   z-index: 999;
-  background-color: #000;
+  width: 35px;
+  height: 40px;
 }
-
 </style>

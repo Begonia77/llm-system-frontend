@@ -34,11 +34,6 @@ export const columns: BasicColumn[] = [
     width: 160,
   },
   {
-    title: '商品描述',
-    dataIndex: 'description',
-    width: 160,
-  },
-  {
     title: '进货价',
     dataIndex: 'purchasePrice',
     width: 160,
@@ -46,6 +41,11 @@ export const columns: BasicColumn[] = [
   {
     title: '售出价',
     dataIndex: 'salePrice',
+    width: 160,
+  },
+  {
+    title: '商品描述',
+    dataIndex: 'description',
     width: 160,
   },
   {

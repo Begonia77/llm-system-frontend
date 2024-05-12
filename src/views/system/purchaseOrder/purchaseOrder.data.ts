@@ -79,17 +79,17 @@ export const searchFormSchema: FormSchema[] = [
     },
     colProps: { span: 8 },
   },
-  {
-    label: '业务员',
-    field: 'userId',
-    component: 'ApiSelect',
-    componentProps: {
-      api: () => getListSimpleUsers(),
-      labelField: 'nickname',
-      valueField: 'id',
-    },
-    colProps: { span: 8 },
-  },
+  // {
+  //   label: '业务员',
+  //   field: 'userId',
+  //   component: 'ApiSelect',
+  //   componentProps: {
+  //     api: () => getListSimpleUsers(),
+  //     labelField: 'nickname',
+  //     valueField: 'id',
+  //   },
+  //   colProps: { span: 8 },
+  // },
   {
     label: '创建时间',
     field: 'createTime',

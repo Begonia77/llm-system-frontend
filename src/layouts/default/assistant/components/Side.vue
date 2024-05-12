@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { message } from 'ant-design-vue'
+import { LoadingOutlined } from '@ant-design/icons-vue'
 import dayjs from 'dayjs'
+import * as XLSX from 'xlsx'
 import { useUserStore } from '@/store/modules/user'
 import headerImg from '@/assets/images/header.jpg'
 import { postLlmFeature } from '@/api/llm'
@@ -10,6 +12,8 @@ const tableDataSource = ref<any[]>([])
 const tableDataColumns = ref<any[]>([])
 
 const openDataModal = ref<boolean>(false)
+
+const isLoading = ref<boolean>(false)
 
 function showDataModal(tableData: any[]) {
   tableDataSource.value = tableData
@@ -28,33 +32,21 @@ function showDataModal(tableData: any[]) {
 }
 
 function hideDataModal() {
-  openDataModal.value = false
+  // openDataModal.value = false
+  console.log('tableDataSource', tableDataSource.value)
+
+  // 创建一个新的Workbook
+  const wb = XLSX.utils.book_new()
+
+  // 将数据转换为工作表
+  const ws = XLSX.utils.json_to_sheet(tableDataSource.value)
+
+  // 将工作表添加到Workbook中
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1')
+
+  // 生成Excel文件
+  XLSX.writeFile(wb, 'table_data.xlsx')
 }
-
-// const tableDataColumns = [
-//   {
-//     title: '仓库名称',
-//     dataIndex: '仓库名称',
-//     key: 'name',
-//   },
-//   {
-//     title: '仓库类型',
-//     dataIndex: '仓库类型',
-//     key: '仓库类型',
-//   },
-//   {
-//     title: '仓库地址',
-//     dataIndex: '仓库地址',
-//     key: '仓库地址',
-//   },
-//   {
-//     title: '库存上限',
-//     dataIndex: '库存上限',
-//     key: '库存上限',
-//   },
-// ]
-
-// import { postLlmFeature } from '@/api/llm'
 
 const chatList = ref<any>(localStorage.getItem('chatRecord') ? JSON.parse(localStorage.getItem('chatRecord') || '') : [])
 
@@ -85,19 +77,13 @@ async function send() {
   }
 
   // 进行发送操作
-  // 接口postLlmFeature
-  // console.log('inputText.value', inputText.value)
+  // const res = await postLlmFeature({ question: inputText.value })
+  // console.log('res', res)
+  // 发送的过程中，显示加载中
+  isLoading.value = true
+  // 写try catch，保证发送完之后，isLoading会变成false
   const res = await postLlmFeature({ question: inputText.value })
-  console.log('res', res)
-  // 模拟请求
-  // const res = {
-  //   code: 0,
-  //   data: {
-  //     type: 2,
-  //     tableData: [],
-  //     text: '采购订单是企业在采购过程中的重要文件，通过记录和跟踪供应商的交易历史和价格等信息，帮助企业评估供应商的可靠性和性价比，优化供应链管理。在进销存系统中，采购订单扮演着至关重要的角色，帮助企业实现高效的采购流程，降低成本，提高生产效率。',
-  //   },
-  // }
+  isLoading.value = false
 
   console.log(res.data.data)
 
@@ -181,8 +167,9 @@ onMounted(() => {
     <div class="input-box">
       <a-textarea v-model:value="inputText" class="input-box-textarea" :show-count="true" placeholder="请输入操作" :maxlength="50" />
       <div class="input-box-buttons">
-        <a-button class="first-button" type="primary" @click="send">
+        <a-button class="first-button" type="primary" @click="send" :disabled="isLoading">
           发送
+          <LoadingOutlined v-if="isLoading" spin />
         </a-button>
 
         <a-popconfirm title="确定清空聊天记录吗？" ok-text="Yes" cancel-text="No" @confirm="clearRecord">
@@ -194,7 +181,7 @@ onMounted(() => {
     </div>
 
     <div>
-      <a-modal v-model:open="openDataModal" width="1300px" title="数据展示" ok-text="确认" style="height: 600px;" @ok="hideDataModal">
+      <a-modal v-model:open="openDataModal" width="1300px" title="数据展示" ok-text="导出" style="height: 600px;" @ok="hideDataModal">
         <a-table :data-source="tableDataSource" :columns="tableDataColumns" />
       </a-modal>
     </div>

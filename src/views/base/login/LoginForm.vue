@@ -43,7 +43,7 @@ const captchaType = ref('blockPuzzle') // blockPuzzle 滑块 clickWord 点击文
 
 const formData = reactive({
   tenantName: '芋道源码',
-  username: 'Begonia',
+  username: 'yanxiaogui',
   password: 'admin123',
   captchaVerification: '',
 })
